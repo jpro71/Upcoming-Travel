@@ -1,9 +1,20 @@
+import { trips } from "@/data/trips";
+import { formatDateRange, daysUntil } from "@/lib/dateUtils";
+
 export default function HeroCard() {
+  const sortedTrips = [...trips].sort(
+    (a, b) =>
+      new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+  );
+
+  const trip = sortedTrips[0];
+  const countdown = daysUntil(trip.startDate);
+
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
       <img
-        src="/images/norwegian-prima.jpg"
-        alt="Norwegian Prima"
+        src={trip.image || "/images/norwegian-prima.jpg"}
+        alt={trip.title}
         className="h-72 w-full object-cover"
       />
 
@@ -13,15 +24,19 @@ export default function HeroCard() {
         </div>
 
         <h2 className="mt-3 text-5xl font-bold">
-          Norwegian Prima
+          {trip.title}
         </h2>
 
         <p className="mt-3 text-xl text-slate-600">
-          November 8 – November 12, 2026
+          {trip.destination}
+        </p>
+
+        <p className="mt-2 text-lg text-slate-500">
+          {formatDateRange(trip.startDate, trip.endDate)}
         </p>
 
         <div className="mt-8 inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white text-xl font-semibold">
-          99 Days Remaining
+          {countdown} Days Remaining
         </div>
       </div>
     </div>
