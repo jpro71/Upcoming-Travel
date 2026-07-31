@@ -1,26 +1,30 @@
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+import HeroCard from "@/components/HeroCard";
+import TripCard from "@/components/TripCard";
+import { trips } from "@/data/trips";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-100">
+    <main className="bg-slate-100 min-h-screen">
       <Header />
 
-      <div className="max-w-7xl mx-auto p-8">
-        <div className="rounded-2xl bg-white shadow-lg p-8">
-          <div className="text-sm uppercase tracking-widest text-slate-500">
-            Next Adventure
-          </div>
+      <div className="flex">
+        <Sidebar />
 
-          <h2 className="text-5xl font-bold mt-3">
-            Norwegian Prima
-          </h2>
+        <div className="flex-1 p-8 space-y-8">
+          <HeroCard />
 
-          <p className="text-xl text-slate-600 mt-3">
-            November 8 – November 12, 2026
-          </p>
+          <div>
+            <h2 className="mb-4 text-2xl font-bold">
+              Upcoming Trips
+            </h2>
 
-          <div className="mt-8 inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white text-xl font-semibold">
-            99 Days Remaining
+            <div className="grid grid-cols-3 gap-6">
+              {trips.map((trip) => (
+                <TripCard key={trip.id} trip={trip} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
