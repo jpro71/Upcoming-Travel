@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { formatDateRange, daysUntil, tripStatus } from "@/lib/dateUtils";
 
 type Trip = {
+  id: number;
   title: string;
   type: string;
   destination: string;
@@ -21,34 +23,36 @@ export default function TripCard({ trip }: { trip: Trip }) {
       : "bg-slate-200 text-slate-700";
 
   return (
-    <button className="overflow-hidden rounded-xl bg-white text-left shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-xl">
-      <img
-        src={trip.image || "/images/norwegian-prima.jpg"}
-        alt={trip.title}
-        className="h-36 w-full object-cover"
-      />
+    <Link href={`/trip/${trip.id}`}>
+      <div className="overflow-hidden rounded-xl bg-white shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+        <img
+          src={trip.image || "/images/norwegian-prima.jpg"}
+          alt={trip.title}
+          className="h-36 w-full object-cover"
+        />
 
-      <div className="p-5">
-        <div className="text-sm text-slate-500">{trip.type}</div>
+        <div className="p-5">
+          <div className="text-sm text-slate-500">{trip.type}</div>
 
-        <h3 className="mt-2 text-2xl font-bold">{trip.title}</h3>
+          <h3 className="mt-2 text-2xl font-bold">{trip.title}</h3>
 
-        <p className="mt-1 text-slate-600">{trip.destination}</p>
+          <p className="mt-1 text-slate-600">{trip.destination}</p>
 
-        <p className="mt-3 text-slate-500">
-          {formatDateRange(trip.startDate, trip.endDate)}
-        </p>
+          <p className="mt-3 text-slate-500">
+            {formatDateRange(trip.startDate, trip.endDate)}
+          </p>
 
-        <div className="mt-5 flex items-center justify-between">
-          <span className={`rounded-lg px-3 py-2 text-sm font-semibold ${statusStyle}`}>
-            {status}
-          </span>
+          <div className="mt-5 flex items-center justify-between">
+            <span className={`rounded-lg px-3 py-2 text-sm font-semibold ${statusStyle}`}>
+              {status}
+            </span>
 
-          <span className="font-bold text-blue-600">
-            {countdown} Days
-          </span>
+            <span className="font-bold text-blue-600">
+              {countdown} Days
+            </span>
+          </div>
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
