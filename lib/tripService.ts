@@ -18,9 +18,7 @@ export async function getTrips(): Promise<Trip[]> {
     .select("*")
     .order("start_date");
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   return (data ?? []).map(mapDatabaseTrip);
 }
@@ -69,11 +67,36 @@ export async function createTrip(data: TripDraft): Promise<Trip> {
     .select()
     .single();
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   return mapDatabaseTrip(inserted);
+}
+
+export async function updateTrip(trip: Trip): Promise<Trip> {
+  const updateData = {
+    ...mapTripForDatabase(trip),
+    updated_at: new Date().toISOString(),
+  };
+
+  const { data, error } = await supabase
+    .from("trips")
+    .update(updateData)
+    .eq("id", trip.id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return mapDatabaseTrip(data);
+}
+
+export async function deleteTrip(id: number): Promise<void> {
+  const { error } = await supabase
+    .from("trips")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
 }
 
 export function saveDraft(data: TripDraft) {
@@ -82,7 +105,6 @@ export function saveDraft(data: TripDraft) {
 
 export function loadDraft(): TripDraft | null {
   const draft = sessionStorage.getItem(DRAFT_KEY);
-
   return draft ? JSON.parse(draft) : null;
 }
 
