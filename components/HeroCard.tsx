@@ -1,24 +1,41 @@
-import { trips } from "@/data/trips";
+import { Trip } from "@/types/trip";
 import { formatDateRange, daysUntil } from "@/lib/dateUtils";
 
-export default function HeroCard() {
-  const sortedTrips = [...trips].sort(
-    (a, b) =>
-      new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-  );
+type HeroCardProps = {
+  trip?: Trip;
+};
 
-  const trip = sortedTrips[0];
+export default function HeroCard({ trip }: HeroCardProps) {
+  if (!trip) {
+    return (
+      <div className="rounded-2xl bg-white p-12 shadow-lg">
+        <h2 className="text-4xl font-bold">
+          Plan Your Next Adventure
+        </h2>
+
+        <p className="mt-4 text-xl text-slate-600">
+          You haven't created any trips yet.
+        </p>
+
+        <p className="mt-2 text-slate-500">
+          Click <strong>Add Trip</strong> to start planning your next journey.
+        </p>
+      </div>
+    );
+  }
+
   const countdown = daysUntil(trip.startDate);
 
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
       <img
-        src={trip.image || "/images/norwegian-prima.jpg"}
+        src={trip.image || "/images/default-trip.jpg"}
         alt={trip.title}
         className="h-72 w-full object-cover"
       />
 
       <div className="p-8">
+
         <div className="text-sm uppercase tracking-widest text-slate-500">
           Next Adventure
         </div>
@@ -35,9 +52,10 @@ export default function HeroCard() {
           {formatDateRange(trip.startDate, trip.endDate)}
         </p>
 
-        <div className="mt-8 inline-flex rounded-xl bg-blue-600 px-6 py-3 text-white text-xl font-semibold">
+        <div className="mt-8 inline-flex rounded-xl bg-blue-600 px-6 py-3 text-xl font-semibold text-white">
           {countdown} Days Remaining
         </div>
+
       </div>
     </div>
   );

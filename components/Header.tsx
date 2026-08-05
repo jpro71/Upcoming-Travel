@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
     <header className="bg-slate-900 text-white shadow-lg">
@@ -10,13 +12,16 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="rounded-lg bg-slate-700 px-4 py-2 hover:bg-slate-600">
+          <button className="rounded-lg bg-slate-700 px-4 py-2 transition hover:bg-slate-600">
             Search
           </button>
 
-          <button className="rounded-lg bg-blue-600 px-5 py-2 font-semibold hover:bg-blue-700">
+          <Link
+            href="/new-trip"
+            className="rounded-lg bg-blue-600 px-5 py-2 font-semibold transition hover:bg-blue-700"
+          >
             + Add Trip
-          </button>
+          </Link>
         </div>
       </div>
     </header>

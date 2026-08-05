@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { trips } from "@/data/trips";
 import { notFound } from "next/navigation";
+
+import { getTrip } from "@/lib/tripService";
 import { formatDateRange, daysUntil } from "@/lib/dateUtils";
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 export default async function TripDetailsPage({ params }: Props) {
   const { id } = await params;
 
-  const trip = trips.find((t) => t.id === Number(id));
+  const trip = await getTrip(Number(id));
 
   if (!trip) {
     notFound();
@@ -24,20 +25,22 @@ export default async function TripDetailsPage({ params }: Props) {
 
         <div
           className="h-3 w-full"
-          style={{ backgroundColor: trip.color }}
+          style={{
+            backgroundColor: trip.color || "#2563EB",
+          }}
         />
 
         <div className="p-6 pb-0">
           <Link
             href="/"
-            className="inline-block rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-300"
+            className="inline-block rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
           >
             ← Back to Dashboard
           </Link>
         </div>
 
         <img
-          src={trip.image || "/images/norwegian-prima.jpg"}
+          src={trip.image || "/images/default-trip.jpg"}
           alt={trip.title}
           className="h-80 w-full object-cover"
         />
@@ -64,31 +67,38 @@ export default async function TripDetailsPage({ params }: Props) {
             {daysUntil(trip.startDate)} Days Remaining
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
 
             <div className="rounded-xl border bg-slate-50 p-6">
-              <h2 className="mb-4 text-xl font-bold">Travel Information</h2>
 
-              <p><strong>Airline:</strong> {trip.airline || "Not Assigned"}</p>
-              <p><strong>Hotel:</strong> {trip.hotel || "Not Assigned"}</p>
-              <p><strong>Cruise Line:</strong> {trip.cruiseLine || "N/A"}</p>
-              <p><strong>Ship:</strong> {trip.ship || "N/A"}</p>
-              <p><strong>Room:</strong> {trip.room || "N/A"}</p>
+              <h2 className="mb-4 text-xl font-bold">
+                Trip Information
+              </h2>
+
+              <p><strong>Status:</strong> {trip.status}</p>
+
+              <p><strong>Type:</strong> {trip.type}</p>
+
+              <p><strong>Destination:</strong> {trip.destination}</p>
+
             </div>
 
             <div className="rounded-xl border bg-slate-50 p-6">
-              <h2 className="mb-4 text-xl font-bold">Travelers</h2>
 
-              <ul className="list-disc pl-5">
-                {trip.travelers.map((traveler) => (
-                  <li key={traveler}>{traveler}</li>
-                ))}
-              </ul>
+              <h2 className="mb-4 text-xl font-bold">
+                Notes
+              </h2>
+
+              <p>
+                {trip.notes || "No notes yet."}
+              </p>
+
             </div>
 
           </div>
 
         </div>
+
       </div>
     </main>
   );
