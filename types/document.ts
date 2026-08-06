@@ -19,6 +19,9 @@ export interface TripDocument {
   fileName: string;
   filePath: string;
 
+  fileSize?: number;
+  contentType?: string;
+
   notes?: string;
 
   uploadedAt?: string;

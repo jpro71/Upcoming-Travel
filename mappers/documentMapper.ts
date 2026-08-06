@@ -11,6 +11,9 @@ export function mapDatabaseDocument(row: any): TripDocument {
     fileName: row.file_name,
     filePath: row.file_path,
 
+    fileSize: row.file_size,
+    contentType: row.content_type,
+
     notes: row.notes ?? "",
 
     uploadedAt: row.uploaded_at,
@@ -26,6 +29,9 @@ export function mapDocumentForDatabase(document: TripDocument) {
 
     file_name: document.fileName,
     file_path: document.filePath,
+
+    file_size: document.fileSize,
+    content_type: document.contentType,
 
     notes: document.notes,
   };
