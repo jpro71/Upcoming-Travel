@@ -152,27 +152,21 @@ export default async function FlightsCard({ tripId }: Props) {
 
                   {flight.seat && (
                     <div>
-                      <span className="font-semibold">
-                        Seat:
-                      </span>{" "}
+                      <span className="font-semibold">Seat:</span>{" "}
                       {flight.seat}
                     </div>
                   )}
 
                   {flight.cabinClass && (
                     <div>
-                      <span className="font-semibold">
-                        Cabin:
-                      </span>{" "}
+                      <span className="font-semibold">Cabin:</span>{" "}
                       {flight.cabinClass}
                     </div>
                   )}
 
                   {flight.cost !== null && (
                     <div>
-                      <span className="font-semibold">
-                        Cost:
-                      </span>{" "}
+                      <span className="font-semibold">Cost:</span>{" "}
                       ${flight.cost.toFixed(2)}
                     </div>
                   )}

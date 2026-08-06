@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { createFlight } from "@/lib/flightService";
 import { Flight } from "@/types/flight";
+import AirportAutocomplete from "@/components/AirportAutocomplete";
 
 export default function AddFlightPage() {
   const router = useRouter();

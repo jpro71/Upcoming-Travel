@@ -26,9 +26,11 @@ export async function getFlight(
     .from("flights")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
-  if (error) {
+  if (error) throw error;
+
+  if (!data) {
     return null;
   }
 

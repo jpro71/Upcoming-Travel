@@ -26,6 +26,10 @@ export default function AirportAutocomplete({
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
+    setSearch(value);
+  }, [value]);
+
+  useEffect(() => {
     const timer = setTimeout(async () => {
       if (!search.trim()) {
         setResults([]);
@@ -53,9 +57,14 @@ export default function AirportAutocomplete({
       <input
         value={search}
         onFocus={() => setShowResults(true)}
+        onBlur={() => {
+          setTimeout(() => setShowResults(false), 150);
+        }}
         onChange={(e) => {
-          setSearch(e.target.value);
-          onChange(e.target.value);
+          const text = e.target.value.toUpperCase();
+
+          setSearch(text);
+          onChange(text);
         }}
         className="w-full rounded-xl border p-3"
         placeholder="Airport code, city or airport name"
@@ -71,7 +80,7 @@ export default function AirportAutocomplete({
               key={airport.iata_code}
               type="button"
               onClick={() => {
-                setSearch(airport.display_name);
+                setSearch(airport.iata_code);
                 onChange(airport.iata_code);
                 setShowResults(false);
               }}
@@ -82,7 +91,7 @@ export default function AirportAutocomplete({
               </div>
 
               <div className="text-sm text-slate-500">
-                {airport.city}
+                {airport.iata_code}
               </div>
 
             </button>
