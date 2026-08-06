@@ -6,6 +6,7 @@ import TripHeader from "@/components/trip/TripHeader";
 import TripOverviewForm from "@/components/trip/TripOverviewForm";
 import TripNotes from "@/components/trip/TripNotes";
 import FlightsCard from "@/components/trip/FlightsCard";
+import DocumentsCard from "@/components/trip/DocumentsCard";
 
 type Props = {
   params: Promise<{
@@ -39,6 +40,12 @@ export default async function TripDetailsPage({ params }: Props) {
         <div className="mt-8">
 
           <FlightsCard tripId={trip.id} />
+
+        </div>
+
+        <div className="mt-8">
+
+          <DocumentsCard tripId={trip.id} />
 
         </div>
 
