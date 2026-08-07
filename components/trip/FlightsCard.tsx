@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getFlights } from "@/lib/flightService";
+import { getAirportLocationLabels, getFlights } from "@/lib/flightService";
 
 type Props = {
   tripId: number;
@@ -19,15 +19,21 @@ function formatDateTime(value: string | null) {
   };
 }
 
-export default async function FlightsCard({ tripId }: Props) {
+export default async function FlightsCard({
+  tripId,
+}: Props) {
   const flights = await getFlights(tripId);
+  const airportLabels = await getAirportLocationLabels(
+    flights.flatMap((flight) => [flight.departureAirport, flight.arrivalAirport])
+  );
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <div className="rounded-2xl bg-white p-6 shadow-md">
 
       <div className="mb-6 flex items-center justify-between">
 
         <div>
+
           <h2 className="text-2xl font-bold">
             Flights
           </h2>
@@ -35,6 +41,7 @@ export default async function FlightsCard({ tripId }: Props) {
           <p className="mt-1 text-slate-500">
             Airline reservations for this trip.
           </p>
+
         </div>
 
         <Link
@@ -65,8 +72,13 @@ export default async function FlightsCard({ tripId }: Props) {
         <div className="space-y-5">
 
           {flights.map((flight) => {
-            const departure = formatDateTime(flight.departureDateTime);
-            const arrival = formatDateTime(flight.arrivalDateTime);
+            const departure = formatDateTime(
+              flight.departureDateTime
+            );
+
+            const arrival = formatDateTime(
+              flight.arrivalDateTime
+            );
 
             return (
 
@@ -89,16 +101,39 @@ export default async function FlightsCard({ tripId }: Props) {
 
                   </div>
 
-                  {flight.confirmationNumber && (
-                    <div className="text-right text-sm text-slate-500">
-                      Confirmation
-                      <div className="font-semibold text-slate-700">
-                        {flight.confirmationNumber}
-                      </div>
-                    </div>
-                  )}
+                  <div className="flex gap-2">
+
+                    <Link
+                      href={`/trip/${tripId}/edit-flight/${flight.id}`}
+                      className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600"
+                    >
+                      Edit
+                    </Link>
+
+                    <Link
+                      href={`/trip/${tripId}/delete-flight/${flight.id}`}
+                      className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                    >
+                      Delete
+                    </Link>
+
+                  </div>
 
                 </div>
+
+                {flight.confirmationNumber && (
+
+                  <div className="mt-4 text-sm text-slate-500">
+
+                    Confirmation
+
+                    <div className="font-semibold text-slate-700">
+                      {flight.confirmationNumber}
+                    </div>
+
+                  </div>
+
+                )}
 
                 <div className="my-6 grid grid-cols-3 items-center text-center">
 
@@ -107,6 +142,12 @@ export default async function FlightsCard({ tripId }: Props) {
                     <div className="text-2xl font-bold">
                       {flight.departureAirport}
                     </div>
+
+                    {airportLabels[flight.departureAirport] && (
+                      <div className="mt-1 text-sm font-medium text-slate-500">
+                        {airportLabels[flight.departureAirport]}
+                      </div>
+                    )}
 
                     {departure && (
                       <>
@@ -132,6 +173,12 @@ export default async function FlightsCard({ tripId }: Props) {
                       {flight.arrivalAirport}
                     </div>
 
+                    {airportLabels[flight.arrivalAirport] && (
+                      <div className="mt-1 text-sm font-medium text-slate-500">
+                        {airportLabels[flight.arrivalAirport]}
+                      </div>
+                    )}
+
                     {arrival && (
                       <>
                         <div className="mt-2 text-sm">
@@ -152,21 +199,27 @@ export default async function FlightsCard({ tripId }: Props) {
 
                   {flight.seat && (
                     <div>
-                      <span className="font-semibold">Seat:</span>{" "}
+                      <span className="font-semibold">
+                        Seats:
+                      </span>{" "}
                       {flight.seat}
                     </div>
                   )}
 
                   {flight.cabinClass && (
                     <div>
-                      <span className="font-semibold">Cabin:</span>{" "}
+                      <span className="font-semibold">
+                        Cabin:
+                      </span>{" "}
                       {flight.cabinClass}
                     </div>
                   )}
 
                   {flight.cost !== null && (
                     <div>
-                      <span className="font-semibold">Cost:</span>{" "}
+                      <span className="font-semibold">
+                        Cost:
+                      </span>{" "}
                       ${flight.cost.toFixed(2)}
                     </div>
                   )}

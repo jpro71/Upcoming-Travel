@@ -1,24 +1,27 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getTrip } from "@/lib/tripService";
+import { getFlight } from "@/lib/flightService";
 
 import FlightForm from "@/components/trip/FlightForm";
 
 type Props = {
   params: Promise<{
     id: string;
+    flightId: string;
   }>;
 };
 
-export default async function AddFlightPage({
+export default async function EditFlightPage({
   params,
 }: Props) {
-  const { id } = await params;
+  const { id, flightId } = await params;
 
-  const trip = await getTrip(Number(id));
+  const flight = await getFlight(
+    Number(flightId)
+  );
 
-  if (!trip) {
+  if (!flight) {
     notFound();
   }
 
@@ -32,11 +35,11 @@ export default async function AddFlightPage({
           <div>
 
             <h1 className="text-4xl font-bold">
-              Add Flight
+              Edit Flight
             </h1>
 
             <p className="mt-2 text-slate-500">
-              Enter your flight reservation details.
+              Update your flight reservation.
             </p>
 
           </div>
@@ -51,9 +54,15 @@ export default async function AddFlightPage({
         </div>
 
         <FlightForm
-          tripId={trip.id}
-          defaultDepartureDate={trip.startDate}
-          defaultArrivalDate={trip.startDate}
+          tripId={flight.tripId}
+          defaultDepartureDate={
+            flight.departureDateTime?.substring(0, 10) ?? ""
+          }
+          defaultArrivalDate={
+            flight.arrivalDateTime?.substring(0, 10) ?? ""
+          }
+          flight={flight}
+          isEditing={true}
         />
 
       </div>

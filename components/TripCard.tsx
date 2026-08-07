@@ -8,53 +8,43 @@ export default function TripCard({ trip }: { trip: Trip }) {
 
   const statusStyle =
     status === "Upcoming"
-      ? "bg-blue-100 text-blue-700"
+      ? "bg-[#F5E9D2] text-[#B01E2D]"
       : status === "Traveling"
       ? "bg-green-100 text-green-700"
       : "bg-slate-200 text-slate-700";
 
   return (
     <Link href={`/trip/${trip.id}`}>
-      <div className="cursor-pointer overflow-hidden rounded-xl bg-white shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-xl">
-
+      <div className="cursor-pointer overflow-hidden rounded-xl border border-black/5 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
         <img
           src={trip.image || "/images/norwegian-prima.jpg"}
           alt={trip.title}
-          className="h-36 w-full object-cover"
+          className="h-28 w-full object-cover"
         />
 
-        <div className="p-5">
+        <div className="p-4">
+          <div className="text-xs font-semibold text-[#B01E2D]">{trip.type}</div>
 
-          <div className="text-sm text-slate-500">
-            {trip.type}
-          </div>
-
-          <h3 className="mt-2 text-2xl font-bold">
+          <h3 className="mt-1 text-xl font-bold text-[#1A1A1A]">
             {trip.title}
           </h3>
 
-          <p className="mt-1 text-slate-600">
-            {trip.destination}
+          <p className="mt-1 text-sm text-[#6B6B6B]">⌖ {trip.destination}</p>
+
+          <p className="mt-2 text-sm text-[#6B6B6B]">
+            ▣ {formatDateRange(trip.startDate, trip.endDate)}
           </p>
 
-          <p className="mt-3 text-slate-500">
-            {formatDateRange(trip.startDate, trip.endDate)}
-          </p>
-
-          <div className="mt-5 flex items-center justify-between">
-
-            <span className={`rounded-lg px-3 py-2 text-sm font-semibold ${statusStyle}`}>
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <span className={`rounded-md px-2.5 py-1 text-xs font-semibold ${statusStyle}`}>
               {status}
             </span>
 
-            <span className="font-bold text-blue-600">
+            <span className="text-sm font-bold text-[#B01E2D]">
               {countdown} Days
             </span>
-
           </div>
-
         </div>
-
       </div>
     </Link>
   );

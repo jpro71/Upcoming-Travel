@@ -5,6 +5,61 @@ export type TripStatus =
   | "Completed"
   | "Cancelled";
 
+export interface PlannerItems {
+  flights: boolean;
+  rentalCar: boolean;
+  train: boolean;
+  ferry: boolean;
+  hotel: boolean;
+  vacationRental: boolean;
+  documents: boolean;
+  restaurants: boolean;
+  activities: boolean;
+  packingList: boolean;
+  budget: boolean;
+  notes: boolean;
+}
+
+export interface Hotel {
+  id: number;
+
+  tripId: number;
+
+  hotelName: string;
+  address?: string;
+  phone?: string;
+
+  checkIn?: string;
+  checkOut?: string;
+
+  confirmationNumber?: string;
+
+  notes?: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Restaurant {
+  id: number;
+
+  tripId: number;
+
+  restaurantName: string;
+  address?: string;
+  phone?: string;
+
+  reservationDate?: string;
+  reservationTime?: string;
+
+  confirmationNumber?: string;
+
+  notes?: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface Trip {
   id: number;
 
@@ -25,6 +80,11 @@ export interface Trip {
 
   image?: string;
   color?: string;
+
+  coverPhotoPath?: string;
+  coverPhotoFilename?: string;
+
+  plannerItems?: PlannerItems;
 
   travelers: string[];
 

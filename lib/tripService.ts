@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { mapDatabaseTrip, mapTripForDatabase } from "@/mappers/tripMapper";
-import { Trip } from "@/types/trip";
+import { PlannerItems, Trip } from "@/types/trip";
 
 const DRAFT_KEY = "travel-app-trip-draft";
 
@@ -10,7 +10,24 @@ export type TripDraft = {
   destination: string;
   startDate: string;
   endDate: string;
+  plannerItems: PlannerItems;
 };
+
+async function applyCoverPhoto(trip: Trip): Promise<Trip> {
+  if (!trip.coverPhotoPath) {
+    return trip;
+  }
+
+  const { data } = await supabase.storage
+    .from("trip-covers")
+    .createSignedUrl(trip.coverPhotoPath, 60 * 60);
+
+  if (data?.signedUrl) {
+    trip.image = data.signedUrl;
+  }
+
+  return trip;
+}
 
 export async function getTrips(): Promise<Trip[]> {
   const { data, error } = await supabase
@@ -20,7 +37,9 @@ export async function getTrips(): Promise<Trip[]> {
 
   if (error) throw error;
 
-  return (data ?? []).map(mapDatabaseTrip);
+  const trips = (data ?? []).map(mapDatabaseTrip);
+
+  return Promise.all(trips.map(applyCoverPhoto));
 }
 
 export async function getTrip(id: number): Promise<Trip | null> {
@@ -30,17 +49,14 @@ export async function getTrip(id: number): Promise<Trip | null> {
     .eq("id", id)
     .single();
 
-  if (error) {
-    return null;
-  }
+  if (error) return null;
 
-  return mapDatabaseTrip(data);
+  return applyCoverPhoto(mapDatabaseTrip(data));
 }
 
 export async function createTrip(data: TripDraft): Promise<Trip> {
   const trip: Trip = {
     id: 0,
-
     type: data.tripType as Trip["type"],
     status: "Planning",
 
@@ -57,6 +73,8 @@ export async function createTrip(data: TripDraft): Promise<Trip> {
 
     image: "/images/default-trip.jpg",
     color: "#2563EB",
+
+    plannerItems: data.plannerItems,
 
     travelers: ["Jim", "Denise"],
   };
@@ -99,8 +117,41 @@ export async function deleteTrip(id: number): Promise<void> {
   if (error) throw error;
 }
 
-export function saveDraft(data: TripDraft) {
-  sessionStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+export function saveDraft(data: Partial<TripDraft>) {
+  const existing = loadDraft();
+
+  const merged: TripDraft = {
+    tripType: "",
+    tripName: "",
+    destination: "",
+    startDate: "",
+    endDate: "",
+
+    plannerItems: {
+      flights: false,
+      rentalCar: false,
+      train: false,
+      ferry: false,
+      hotel: false,
+      vacationRental: false,
+      documents: false,
+      restaurants: false,
+      activities: false,
+      packingList: false,
+      budget: false,
+      notes: false,
+    },
+
+    ...existing,
+    ...data,
+
+    plannerItems: {
+      ...(existing?.plannerItems ?? {}),
+      ...(data.plannerItems ?? {}),
+    },
+  };
+
+  sessionStorage.setItem(DRAFT_KEY, JSON.stringify(merged));
 }
 
 export function loadDraft(): TripDraft | null {

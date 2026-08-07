@@ -8,17 +8,12 @@ type HeroCardProps = {
 export default function HeroCard({ trip }: HeroCardProps) {
   if (!trip) {
     return (
-      <div className="rounded-2xl bg-white p-12 shadow-lg">
-        <h2 className="text-4xl font-bold">
+      <div className="rounded-xl bg-white p-6 shadow-md">
+        <h2 className="text-3xl font-bold text-[#1A1A1A]">
           Plan Your Next Adventure
         </h2>
-
-        <p className="mt-4 text-xl text-slate-600">
-          You haven't created any trips yet.
-        </p>
-
-        <p className="mt-2 text-slate-500">
-          Click <strong>Add Trip</strong> to start planning your next journey.
+        <p className="mt-2 text-sm text-[#6B6B6B]">
+          Click <strong>Add Trip</strong> to start planning.
         </p>
       </div>
     );
@@ -27,35 +22,31 @@ export default function HeroCard({ trip }: HeroCardProps) {
   const countdown = daysUntil(trip.startDate);
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
+    <div className="overflow-hidden rounded-xl bg-white shadow-md">
       <img
         src={trip.image || "/images/default-trip.jpg"}
         alt={trip.title}
-        className="h-72 w-full object-cover"
+        className="h-[180px] w-full object-cover"
       />
 
-      <div className="p-8">
-
-        <div className="text-sm uppercase tracking-widest text-slate-500">
+      <div className="p-5">
+        <div className="text-xs uppercase tracking-[0.14em] text-[#6B6B6B]">
           Next Adventure
         </div>
 
-        <h2 className="mt-3 text-5xl font-bold">
+        <h2 className="mt-1 text-3xl font-bold text-[#1A1A1A]">
           {trip.title}
         </h2>
 
-        <p className="mt-3 text-xl text-slate-600">
-          {trip.destination}
-        </p>
-
-        <p className="mt-2 text-lg text-slate-500">
-          {formatDateRange(trip.startDate, trip.endDate)}
-        </p>
-
-        <div className="mt-8 inline-flex rounded-xl bg-blue-600 px-6 py-3 text-xl font-semibold text-white">
-          {countdown} Days Remaining
+        <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-[#6B6B6B]">
+          <span>⌖ {trip.destination}</span>
+          <span className="text-[#D4AF37]">|</span>
+          <span>▣ {formatDateRange(trip.startDate, trip.endDate)}</span>
         </div>
 
+        <div className="mt-4 inline-flex rounded-lg bg-[#B01E2D] px-4 py-2 text-sm font-bold text-white shadow-sm">
+          {countdown} Days Remaining
+        </div>
       </div>
     </div>
   );

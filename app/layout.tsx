@@ -1,9 +1,19 @@
 import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Upcoming Travel",
-  description: "Shared Family Travel Dashboard",
+  title: {
+    default: "PortalPuffin",
+    template: "%s | PortalPuffin",
+  },
+  description: "Where every trip comes together.",
 };
 
 export default function RootLayout({
@@ -13,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={montserrat.variable}>{children}</body>
     </html>
   );
 }

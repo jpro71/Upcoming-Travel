@@ -16,40 +16,37 @@ export default async function Home() {
   const nextTrip = sortedTrips[0];
 
   return (
-    <main className="bg-slate-100 min-h-screen">
+    <main className="min-h-screen bg-[#FBF7EF]">
       <Header />
 
       <div className="flex">
         <Sidebar />
 
-        <div className="flex-1 p-8 space-y-8">
-
+        <div className="min-w-0 flex-1 space-y-4 p-5">
           <HeroCard trip={nextTrip} />
 
-          <div>
-            <h2 className="mb-4 text-2xl font-bold">
+          <section>
+            <h2 className="mb-3 border-l-4 border-[#D4AF37] pl-3 text-xl font-bold text-[#1A1A1A]">
               Upcoming Trips
             </h2>
 
             {sortedTrips.length === 0 ? (
-              <div className="rounded-xl bg-white p-10 text-center shadow">
-                <h3 className="text-2xl font-semibold text-slate-700">
+              <div className="rounded-xl bg-white p-8 text-center shadow-sm">
+                <h3 className="text-xl font-semibold text-[#1A1A1A]">
                   No trips yet
                 </h3>
-
-                <p className="mt-3 text-slate-500">
+                <p className="mt-2 text-sm text-[#6B6B6B]">
                   Click <strong>Add Trip</strong> to create your first trip.
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {sortedTrips.map((trip) => (
                   <TripCard key={trip.id} trip={trip} />
                 ))}
               </div>
             )}
-          </div>
-
+          </section>
         </div>
       </div>
     </main>

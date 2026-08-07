@@ -95,3 +95,30 @@ export async function searchAirports(
 
   return data ?? [];
 }
+export async function getAirportLocationLabels(
+  codes: string[]
+): Promise<Record<string, string>> {
+  const uniqueCodes = [...new Set(codes.filter(Boolean).map((code) => code.toUpperCase()))];
+
+  if (uniqueCodes.length === 0) return {};
+
+  const { data, error } = await supabase
+    .from("airports")
+    .select("iata_code, city, display_name")
+    .in("iata_code", uniqueCodes);
+
+  if (error) throw error;
+
+  return Object.fromEntries(
+    (data ?? []).map((airport) => {
+      const cityState = airport.display_name?.match(
+        new RegExp(`${airport.city}\\s*,\\s*[A-Z]{2}`, "i")
+      )?.[0];
+
+      return [
+        airport.iata_code,
+        cityState ?? airport.city ?? airport.display_name ?? "",
+      ];
+    })
+  );
+}

@@ -21,6 +21,11 @@ export function mapDatabaseTrip(row: any): Trip {
     image: row.image ?? "/images/default-trip.jpg",
     color: row.color ?? "#2563EB",
 
+    coverPhotoPath: row.cover_photo_path ?? undefined,
+    coverPhotoFilename: row.cover_photo_filename ?? undefined,
+
+    plannerItems: row.planner_items ?? undefined,
+
     travelers: [],
   };
 }
@@ -40,5 +45,10 @@ export function mapTripForDatabase(trip: Trip) {
 
     image: trip.image,
     color: trip.color,
+
+    cover_photo_path: trip.coverPhotoPath,
+    cover_photo_filename: trip.coverPhotoFilename,
+
+    planner_items: trip.plannerItems,
   };
 }

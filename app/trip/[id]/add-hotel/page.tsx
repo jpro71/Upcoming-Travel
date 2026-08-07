@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { getTrip } from "@/lib/tripService";
 
-import FlightForm from "@/components/trip/FlightForm";
+import HotelForm from "@/components/trip/HotelForm";
 
 type Props = {
   params: Promise<{
@@ -11,7 +11,7 @@ type Props = {
   }>;
 };
 
-export default async function AddFlightPage({
+export default async function AddHotelPage({
   params,
 }: Props) {
   const { id } = await params;
@@ -25,35 +25,35 @@ export default async function AddFlightPage({
   return (
     <main className="min-h-screen bg-slate-100 p-10">
 
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-3xl">
 
         <div className="mb-8 flex items-center justify-between">
 
           <div>
 
             <h1 className="text-4xl font-bold">
-              Add Flight
+              Add Hotel
             </h1>
 
             <p className="mt-2 text-slate-500">
-              Enter your flight reservation details.
+              Enter your hotel reservation details.
             </p>
 
           </div>
 
           <Link
             href={`/trip/${id}`}
-            className="rounded-xl bg-slate-200 px-5 py-2 font-semibold text-slate-700 hover:bg-slate-300"
+            className="rounded-xl bg-slate-200 px-5 py-2 font-semibold text-slate-700 transition hover:bg-slate-300"
           >
             Cancel
           </Link>
 
         </div>
 
-        <FlightForm
+        <HotelForm
           tripId={trip.id}
-          defaultDepartureDate={trip.startDate}
-          defaultArrivalDate={trip.startDate}
+          defaultCheckIn={trip.startDate}
+          defaultCheckOut={trip.endDate}
         />
 
       </div>

@@ -1,24 +1,33 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="bg-slate-900 text-white shadow-lg">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-8">
-        <div>
-          <h1 className="text-3xl font-bold">Upcoming Travel</h1>
-          <p className="text-sm text-slate-300">
-            Shared Family Travel Dashboard
-          </p>
-        </div>
+    <header className="border-b-2 border-[#D4AF37] bg-white shadow-sm">
+      <div className="flex h-[176px] items-center justify-between gap-6 px-7">
+        <Link
+          href="/"
+          aria-label="PortalPuffin home"
+          className="flex h-full w-[520px] shrink-0 items-center"
+        >
+          <Image
+            src="/images/logos/portalpuffin-logo.png"
+            alt="PortalPuffin - Where every trip comes together"
+            width={1536}
+            height={512}
+            priority
+            className="block h-auto w-[520px] object-contain object-left"
+          />
+        </Link>
 
-        <div className="flex items-center gap-3">
-          <button className="rounded-lg bg-slate-700 px-4 py-2 transition hover:bg-slate-600">
-            Search
+        <div className="flex shrink-0 items-center gap-4">
+          <button className="rounded-lg border border-[#D4AF37] bg-white px-5 py-2.5 text-sm font-semibold text-[#1A1A1A] transition hover:bg-[#F5E9D2]">
+            ⌕&nbsp; Search
           </button>
 
           <Link
             href="/new-trip"
-            className="rounded-lg bg-blue-600 px-5 py-2 font-semibold transition hover:bg-blue-700"
+            className="rounded-lg bg-[#B01E2D] px-6 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#8F1724]"
           >
             + Add Trip
           </Link>
