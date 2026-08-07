@@ -1,8 +1,26 @@
 import { supabase } from "@/lib/supabase";
-import { mapDatabaseTrip, mapTripForDatabase } from "@/mappers/tripMapper";
+import {
+  mapDatabaseTrip,
+  mapTripForDatabase,
+} from "@/mappers/tripMapper";
 import { PlannerItems, Trip } from "@/types/trip";
 
 const DRAFT_KEY = "travel-app-trip-draft";
+
+const DEFAULT_PLANNER_ITEMS: PlannerItems = {
+  flights: false,
+  rentalCar: false,
+  train: false,
+  ferry: false,
+  hotel: false,
+  vacationRental: false,
+  documents: false,
+  restaurants: false,
+  activities: false,
+  packingList: false,
+  budget: false,
+  notes: false,
+};
 
 export type TripDraft = {
   tripType: string;
@@ -42,7 +60,9 @@ export async function getTrips(): Promise<Trip[]> {
   return Promise.all(trips.map(applyCoverPhoto));
 }
 
-export async function getTrip(id: number): Promise<Trip | null> {
+export async function getTrip(
+  id: number
+): Promise<Trip | null> {
   const { data, error } = await supabase
     .from("trips")
     .select("*")
@@ -54,13 +74,19 @@ export async function getTrip(id: number): Promise<Trip | null> {
   return applyCoverPhoto(mapDatabaseTrip(data));
 }
 
-export async function createTrip(data: TripDraft): Promise<Trip> {
+export async function createTrip(
+  data: TripDraft
+): Promise<Trip> {
   const trip: Trip = {
     id: 0,
     type: data.tripType as Trip["type"],
     status: "Planning",
 
-    title: data.tripName.trim() || data.destination.trim() || "New Trip",
+    title:
+      data.tripName.trim() ||
+      data.destination.trim() ||
+      "New Trip",
+
     destination: data.destination,
 
     startDate: data.startDate,
@@ -72,7 +98,7 @@ export async function createTrip(data: TripDraft): Promise<Trip> {
     notes: "",
 
     image: "/images/default-trip.jpg",
-    color: "#2563EB",
+    color: "#B01E2D",
 
     plannerItems: data.plannerItems,
 
@@ -90,7 +116,9 @@ export async function createTrip(data: TripDraft): Promise<Trip> {
   return mapDatabaseTrip(inserted);
 }
 
-export async function updateTrip(trip: Trip): Promise<Trip> {
+export async function updateTrip(
+  trip: Trip
+): Promise<Trip> {
   const updateData = {
     ...mapTripForDatabase(trip),
     updated_at: new Date().toISOString(),
@@ -108,7 +136,9 @@ export async function updateTrip(trip: Trip): Promise<Trip> {
   return mapDatabaseTrip(data);
 }
 
-export async function deleteTrip(id: number): Promise<void> {
+export async function deleteTrip(
+  id: number
+): Promise<void> {
   const { error } = await supabase
     .from("trips")
     .delete()
@@ -117,8 +147,16 @@ export async function deleteTrip(id: number): Promise<void> {
   if (error) throw error;
 }
 
-export function saveDraft(data: Partial<TripDraft>) {
+export function saveDraft(
+  data: Partial<TripDraft>
+): void {
   const existing = loadDraft();
+
+  const plannerItems: PlannerItems = {
+    ...DEFAULT_PLANNER_ITEMS,
+    ...(existing?.plannerItems ?? {}),
+    ...(data.plannerItems ?? {}),
+  };
 
   const merged: TripDraft = {
     tripType: "",
@@ -126,39 +164,23 @@ export function saveDraft(data: Partial<TripDraft>) {
     destination: "",
     startDate: "",
     endDate: "",
-
-    plannerItems: {
-      flights: false,
-      rentalCar: false,
-      train: false,
-      ferry: false,
-      hotel: false,
-      vacationRental: false,
-      documents: false,
-      restaurants: false,
-      activities: false,
-      packingList: false,
-      budget: false,
-      notes: false,
-    },
-
     ...existing,
     ...data,
-
-    plannerItems: {
-      ...(existing?.plannerItems ?? {}),
-      ...(data.plannerItems ?? {}),
-    },
+    plannerItems,
   };
 
-  sessionStorage.setItem(DRAFT_KEY, JSON.stringify(merged));
+  sessionStorage.setItem(
+    DRAFT_KEY,
+    JSON.stringify(merged)
+  );
 }
 
 export function loadDraft(): TripDraft | null {
   const draft = sessionStorage.getItem(DRAFT_KEY);
+
   return draft ? JSON.parse(draft) : null;
 }
 
-export function clearDraft() {
+export function clearDraft(): void {
   sessionStorage.removeItem(DRAFT_KEY);
 }

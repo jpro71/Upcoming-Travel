@@ -21,20 +21,20 @@ export default async function DeleteHotelPage({
     notFound();
   }
 
+  const hotelIdToDelete = hotel.id;
+
   async function deleteCurrentHotel() {
     "use server";
 
-    await deleteHotel(hotel.id);
+    await deleteHotel(hotelIdToDelete);
 
     redirect(`/trip/${id}`);
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 p-10">
-
+    <main className="min-h-screen bg-[#FBF7EF] p-8">
       <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 shadow-md">
-
-        <h1 className="text-3xl font-bold text-red-600">
+        <h1 className="text-3xl font-bold text-[#B01E2D]">
           Delete Hotel
         </h1>
 
@@ -43,7 +43,6 @@ export default async function DeleteHotelPage({
         </p>
 
         <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
-
           <div className="text-xl font-semibold">
             🏨 {hotel.hotelName}
           </div>
@@ -53,13 +52,10 @@ export default async function DeleteHotelPage({
               {hotel.address}
             </div>
           )}
-
         </div>
 
         <form action={deleteCurrentHotel} className="mt-8">
-
           <div className="flex justify-between">
-
             <Link
               href={`/trip/${id}`}
               className="rounded-xl bg-slate-300 px-6 py-3 font-semibold text-slate-700 hover:bg-slate-400"
@@ -69,17 +65,13 @@ export default async function DeleteHotelPage({
 
             <button
               type="submit"
-              className="rounded-xl bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700"
+              className="rounded-xl bg-[#B01E2D] px-6 py-3 font-semibold text-white hover:bg-[#8F1724]"
             >
               Delete Hotel
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </main>
   );
 }
