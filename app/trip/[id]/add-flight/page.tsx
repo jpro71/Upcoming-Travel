@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getTrip } from "@/lib/tripService";
+import { getTripServer } from "@/lib/tripServerService";
 
 import FlightForm from "@/components/trip/FlightForm";
 
@@ -16,21 +16,17 @@ export default async function AddFlightPage({
 }: Props) {
   const { id } = await params;
 
-  const trip = await getTrip(Number(id));
+  const trip = await getTripServer(Number(id));
 
   if (!trip) {
     notFound();
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 p-10">
-
+    <main className="min-h-screen bg-slate-100 p-8">
       <div className="mx-auto max-w-4xl">
-
         <div className="mb-8 flex items-center justify-between">
-
           <div>
-
             <h1 className="text-4xl font-bold">
               Add Flight
             </h1>
@@ -38,7 +34,6 @@ export default async function AddFlightPage({
             <p className="mt-2 text-slate-500">
               Enter your flight reservation details.
             </p>
-
           </div>
 
           <Link
@@ -47,7 +42,6 @@ export default async function AddFlightPage({
           >
             Cancel
           </Link>
-
         </div>
 
         <FlightForm
@@ -55,9 +49,7 @@ export default async function AddFlightPage({
           defaultDepartureDate={trip.startDate}
           defaultArrivalDate={trip.startDate}
         />
-
       </div>
-
     </main>
   );
 }

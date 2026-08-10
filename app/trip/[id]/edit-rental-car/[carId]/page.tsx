@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getTrip } from "@/lib/tripService";
+import { getTripServer } from "@/lib/tripServerService";
 import { getRentalCar } from "@/lib/rentalCarService";
 
 import RentalCarForm from "@/components/trip/RentalCarForm";
@@ -29,7 +29,7 @@ export default async function EditRentalCarPage({
   }
 
   const [trip, rentalCar] = await Promise.all([
-    getTrip(tripId),
+    getTripServer(tripId),
     getRentalCar(rentalCarId),
   ]);
 
@@ -42,7 +42,7 @@ export default async function EditRentalCarPage({
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 p-10">
+    <main className="min-h-screen bg-slate-100 p-8">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 flex items-center justify-between">
           <div>
