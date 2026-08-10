@@ -46,13 +46,13 @@ export default async function TripDetailsPage({ params }: Props) {
     notFound();
   }
 
+  const plannerItems = trip.plannerItems;
+
   return (
     <main className="min-h-screen bg-slate-100">
-
       {/* Hero */}
 
       <div className="relative h-[430px] overflow-hidden">
-
         <img
           src={trip.image}
           alt={trip.title}
@@ -66,7 +66,6 @@ export default async function TripDetailsPage({ params }: Props) {
         </div>
 
         <div className="absolute bottom-10 left-10 text-white">
-
           <div className="mb-3 inline-flex rounded-full bg-blue-600 px-4 py-1 text-sm font-semibold">
             {trip.type}
           </div>
@@ -80,21 +79,17 @@ export default async function TripDetailsPage({ params }: Props) {
           </div>
 
           <div className="mt-2 text-lg text-slate-200">
-            {formatDate(trip.startDate)} – {formatDate(trip.endDate)}
+            {formatDate(trip.startDate)} –{" "}
+            {formatDate(trip.endDate)}
           </div>
-
         </div>
-
       </div>
 
       <div className="relative z-10 mx-auto -mt-10 max-w-7xl px-10 pb-10">
-
         <TripHeader trip={trip} />
 
         <div className="mt-8 rounded-2xl bg-white p-6 shadow-md">
-
           <div className="grid gap-6 md:grid-cols-4">
-
             <div>
               <div className="text-sm text-slate-500">
                 Destination
@@ -143,37 +138,39 @@ export default async function TripDetailsPage({ params }: Props) {
                 </span>
               </div>
             </div>
-
           </div>
-
         </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-2">
-
           <TripOverviewForm trip={trip} />
 
           <TripNotes trip={trip} />
-
         </div>
 
-        <div className="mt-8">
-          <FlightsCard tripId={trip.id} />
-        </div>
+        {plannerItems.flights && (
+          <div className="mt-8">
+            <FlightsCard tripId={trip.id} />
+          </div>
+        )}
 
-        <div className="mt-8">
-          <HotelsCard tripId={trip.id} />
-        </div>
+        {plannerItems.hotel && (
+          <div className="mt-8">
+            <HotelsCard tripId={trip.id} />
+          </div>
+        )}
 
-        <div className="mt-8">
-          <RestaurantsCard tripId={trip.id} />
-        </div>
+        {plannerItems.restaurants && (
+          <div className="mt-8">
+            <RestaurantsCard tripId={trip.id} />
+          </div>
+        )}
 
-        <div className="mt-8">
-          <DocumentsCard tripId={trip.id} />
-        </div>
-
+        {plannerItems.documents && (
+          <div className="mt-8">
+            <DocumentsCard tripId={trip.id} />
+          </div>
+        )}
       </div>
-
     </main>
   );
 }
