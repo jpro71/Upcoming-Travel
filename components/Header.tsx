@@ -25,13 +25,16 @@ export default function Header() {
   return (
     <header className="border-b border-[#E7DDCA] bg-white">
       <div className="flex items-center justify-between px-8 py-4">
-        <Link href="/dashboard">
+        <Link
+          href="/dashboard"
+          className="flex items-center"
+        >
           <Image
             src="/images/logos/portalpuffin-logo.png"
             alt="PortalPuffin"
             width={220}
-            height={70}
-            className="h-auto w-[200px]"
+            height={80}
+            className="h-auto w-auto max-w-[220px]"
             priority
           />
         </Link>
@@ -49,6 +52,13 @@ export default function Header() {
             className="rounded-lg bg-[#B01E2D] px-6 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#8F1724]"
           >
             + Add Trip
+          </Link>
+
+          <Link
+            href="/account"
+            className="rounded-lg border border-[#D4AF37] bg-white px-5 py-2.5 text-sm font-semibold text-[#1A1A1A] transition hover:bg-[#F5E9D2]"
+          >
+            Account
           </Link>
 
           <button

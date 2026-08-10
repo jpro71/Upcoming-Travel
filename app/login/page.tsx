@@ -15,9 +15,7 @@ export default function LoginPage() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     setLoggingIn(true);
@@ -53,16 +51,16 @@ export default function LoginPage() {
     "w-full rounded-xl border border-[#D9C9AA] bg-white p-3 text-[#1A1A1A] outline-none transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/25";
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#FFFDF8] px-6 py-12">
-      <div className="w-full max-w-md">
+    <main className="min-h-screen bg-[#F7F1E7] px-6 py-12">
+      <div className="mx-auto max-w-md">
         <div className="mb-8 text-center">
           <Link href="/">
             <Image
               src="/images/logos/portalpuffin-logo.png"
               alt="PortalPuffin"
               width={300}
-              height={100}
-              className="mx-auto h-auto w-[260px]"
+              height={120}
+              className="mx-auto h-auto w-auto max-w-full"
               priority
             />
           </Link>
@@ -104,9 +102,18 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-5">
-            <label className="mb-2 block font-semibold">
-              Password
-            </label>
+            <div className="mb-2 flex items-center justify-between">
+              <label className="font-semibold">
+                Password
+              </label>
+
+              <Link
+                href="/forgot-password"
+                className="text-sm font-semibold text-[#8F1724] hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </div>
 
             <input
               type="password"
