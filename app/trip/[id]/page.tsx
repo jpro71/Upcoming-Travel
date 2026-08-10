@@ -5,6 +5,7 @@ import TripHeader from "@/components/trip/TripHeader";
 import TripOverviewForm from "@/components/trip/TripOverviewForm";
 import TripNotes from "@/components/trip/TripNotes";
 import FlightsCard from "@/components/trip/FlightsCard";
+import RentalCarsCard from "@/components/trip/RentalCarsCard";
 import HotelsCard from "@/components/trip/HotelsCard";
 import RestaurantsCard from "@/components/trip/RestaurantsCard";
 import DocumentsCard from "@/components/trip/DocumentsCard";
@@ -50,8 +51,6 @@ export default async function TripDetailsPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-slate-100">
-      {/* Hero */}
-
       <div className="relative h-[430px] overflow-hidden">
         <img
           src={trip.image}
@@ -143,29 +142,34 @@ export default async function TripDetailsPage({ params }: Props) {
 
         <div className="mt-8 grid gap-8 lg:grid-cols-2">
           <TripOverviewForm trip={trip} />
-
           <TripNotes trip={trip} />
         </div>
 
-        {plannerItems.flights && (
+        {plannerItems?.flights && (
           <div className="mt-8">
             <FlightsCard tripId={trip.id} />
           </div>
         )}
 
-        {plannerItems.hotel && (
+        {plannerItems?.rentalCar && (
+          <div className="mt-8">
+            <RentalCarsCard tripId={trip.id} />
+          </div>
+        )}
+
+        {plannerItems?.hotel && (
           <div className="mt-8">
             <HotelsCard tripId={trip.id} />
           </div>
         )}
 
-        {plannerItems.restaurants && (
+        {plannerItems?.restaurants && (
           <div className="mt-8">
             <RestaurantsCard tripId={trip.id} />
           </div>
         )}
 
-        {plannerItems.documents && (
+        {plannerItems?.documents && (
           <div className="mt-8">
             <DocumentsCard tripId={trip.id} />
           </div>

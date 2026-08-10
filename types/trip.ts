@@ -40,6 +40,29 @@ export interface Hotel {
   updatedAt?: string;
 }
 
+export interface RentalCar {
+  id: number;
+
+  tripId: number;
+
+  rentalCompany: string;
+  confirmationNumber?: string;
+
+  pickupLocation?: string;
+  pickupAt?: string;
+
+  dropoffLocation?: string;
+  dropoffAt?: string;
+
+  vehicleType?: string;
+  totalCost?: number;
+
+  notes?: string;
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface Restaurant {
   id: number;
 
