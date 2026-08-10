@@ -1,27 +1,46 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { supabase } from "@/lib/supabase";
 
 export default function Header() {
+  const router = useRouter();
+
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error("Unable to sign out:", error);
+      alert("Unable to sign out. Please try again.");
+      return;
+    }
+
+    router.push("/");
+    router.refresh();
+  }
+
   return (
-    <header className="border-b-2 border-[#D4AF37] bg-white shadow-sm">
-      <div className="flex h-[176px] items-center justify-between gap-6 px-7">
-        <Link
-          href="/"
-          aria-label="PortalPuffin home"
-          className="flex h-full w-[520px] shrink-0 items-center"
-        >
+    <header className="border-b border-[#E7DDCA] bg-white">
+      <div className="flex items-center justify-between px-8 py-4">
+        <Link href="/dashboard">
           <Image
             src="/images/logos/portalpuffin-logo.png"
-            alt="PortalPuffin - Where every trip comes together"
-            width={1536}
-            height={512}
+            alt="PortalPuffin"
+            width={220}
+            height={70}
+            className="h-auto w-[200px]"
             priority
-            className="block h-auto w-[520px] object-contain object-left"
           />
         </Link>
 
         <div className="flex shrink-0 items-center gap-4">
-          <button className="rounded-lg border border-[#D4AF37] bg-white px-5 py-2.5 text-sm font-semibold text-[#1A1A1A] transition hover:bg-[#F5E9D2]">
+          <button
+            type="button"
+            className="rounded-lg border border-[#D4AF37] bg-white px-5 py-2.5 text-sm font-semibold text-[#1A1A1A] transition hover:bg-[#F5E9D2]"
+          >
             ⌕&nbsp; Search
           </button>
 
@@ -31,6 +50,14 @@ export default function Header() {
           >
             + Add Trip
           </Link>
+
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="rounded-lg border border-[#B01E2D] bg-white px-5 py-2.5 text-sm font-semibold text-[#B01E2D] transition hover:bg-[#FFF4F4]"
+          >
+            Sign Out
+          </button>
         </div>
       </div>
     </header>

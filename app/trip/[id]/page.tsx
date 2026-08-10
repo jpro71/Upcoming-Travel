@@ -1,5 +1,7 @@
-import { notFound } from "next/navigation";
-import { getTrip } from "@/lib/tripService";
+import { notFound, redirect } from "next/navigation";
+
+import { getTripServer } from "@/lib/tripServerService";
+import { createSupabaseServerClient } from "@/lib/supabaseServer";
 
 import TripHeader from "@/components/trip/TripHeader";
 import TripOverviewForm from "@/components/trip/TripOverviewForm";
@@ -38,10 +40,22 @@ function getTripLength(start: string, end: string) {
   return `${diff} Day${diff === 1 ? "" : "s"}`;
 }
 
-export default async function TripDetailsPage({ params }: Props) {
+export default async function TripDetailsPage({
+  params,
+}: Props) {
   const { id } = await params;
 
-  const trip = await getTrip(Number(id));
+  const supabase = await createSupabaseServerClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const trip = await getTripServer(Number(id));
 
   if (!trip) {
     notFound();

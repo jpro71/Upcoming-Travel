@@ -22,7 +22,7 @@ export default function TripOverviewForm({ trip }: Props) {
 
   const [tripName, setTripName] = useState(trip.title);
   const [destination, setDestination] = useState(trip.destination);
-  const [status, setStatus] = useState<TripStatus>(trip.status);
+  const [status, setStatus] = useState(trip.status);
   const [startDate, setStartDate] = useState(trip.startDate);
   const [endDate, setEndDate] = useState(trip.endDate);
 
@@ -65,7 +65,8 @@ export default function TripOverviewForm({ trip }: Props) {
 
     try {
       await deleteTrip(trip.id);
-      router.push("/");
+
+      router.push("/dashboard");
       router.refresh();
     } catch (err) {
       console.error(err);
@@ -74,10 +75,8 @@ export default function TripOverviewForm({ trip }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-
+    <div className="rounded-2xl bg-white p-6 shadow-md">
       <div className="mb-8 flex items-center justify-between">
-
         <div>
           <h2 className="text-3xl font-bold">
             Trip Overview
@@ -91,11 +90,9 @@ export default function TripOverviewForm({ trip }: Props) {
         <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
           {status}
         </span>
-
       </div>
 
       <div className="space-y-6">
-
         <div>
           <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-slate-500">
             Trip Name
@@ -121,7 +118,6 @@ export default function TripOverviewForm({ trip }: Props) {
         </div>
 
         <div className="grid gap-5 lg:grid-cols-3">
-
           <div>
             <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-slate-500">
               Status
@@ -129,7 +125,9 @@ export default function TripOverviewForm({ trip }: Props) {
 
             <select
               value={status}
-              onChange={(e) => setStatus(e.target.value as TripStatus)}
+              onChange={(e) =>
+                setStatus(e.target.value as TripStatus)
+              }
               className="w-full rounded-xl border border-slate-300 p-3"
             >
               {statuses.map((status) => (
@@ -165,11 +163,9 @@ export default function TripOverviewForm({ trip }: Props) {
               className="w-full rounded-xl border border-slate-300 p-3"
             />
           </div>
-
         </div>
 
         <div className="flex items-center justify-between border-t pt-6">
-
           <div>
             {saved && (
               <span className="text-sm font-semibold text-green-600">
@@ -179,7 +175,6 @@ export default function TripOverviewForm({ trip }: Props) {
           </div>
 
           <div className="flex gap-3">
-
             <button
               onClick={handleDelete}
               className="rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700"
@@ -194,13 +189,9 @@ export default function TripOverviewForm({ trip }: Props) {
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }

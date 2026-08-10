@@ -31,14 +31,32 @@ export type TripDraft = {
   plannerItems: PlannerItems;
 };
 
-async function applyCoverPhoto(trip: Trip): Promise<Trip> {
+async function getCurrentUserId(): Promise<string> {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    throw new Error("You must be logged in.");
+  }
+
+  return user.id;
+}
+
+async function applyCoverPhoto(
+  trip: Trip
+): Promise<Trip> {
   if (!trip.coverPhotoPath) {
     return trip;
   }
 
   const { data } = await supabase.storage
     .from("trip-covers")
-    .createSignedUrl(trip.coverPhotoPath, 60 * 60);
+    .createSignedUrl(
+      trip.coverPhotoPath,
+      60 * 60
+    );
 
   if (data?.signedUrl) {
     trip.image = data.signedUrl;
@@ -47,36 +65,53 @@ async function applyCoverPhoto(trip: Trip): Promise<Trip> {
   return trip;
 }
 
-export async function getTrips(): Promise<Trip[]> {
+export async function getTrips(
+  userId: string
+): Promise<Trip[]> {
   const { data, error } = await supabase
     .from("trips")
     .select("*")
+    .eq("user_id", userId)
     .order("start_date");
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
-  const trips = (data ?? []).map(mapDatabaseTrip);
+  const trips = (data ?? []).map(
+    mapDatabaseTrip
+  );
 
-  return Promise.all(trips.map(applyCoverPhoto));
+  return Promise.all(
+    trips.map(applyCoverPhoto)
+  );
 }
 
 export async function getTrip(
-  id: number
+  id: number,
+  userId: string
 ): Promise<Trip | null> {
   const { data, error } = await supabase
     .from("trips")
     .select("*")
     .eq("id", id)
-    .single();
+    .eq("user_id", userId)
+    .maybeSingle();
 
-  if (error) return null;
+  if (error || !data) {
+    return null;
+  }
 
-  return applyCoverPhoto(mapDatabaseTrip(data));
+  return applyCoverPhoto(
+    mapDatabaseTrip(data)
+  );
 }
 
 export async function createTrip(
   data: TripDraft
 ): Promise<Trip> {
+  const userId = await getCurrentUserId();
+
   const trip: Trip = {
     id: 0,
     type: data.tripType as Trip["type"],
@@ -105,13 +140,23 @@ export async function createTrip(
     travelers: ["Jim", "Denise"],
   };
 
-  const { data: inserted, error } = await supabase
+  const insertData = {
+    ...mapTripForDatabase(trip),
+    user_id: userId,
+  };
+
+  const {
+    data: inserted,
+    error,
+  } = await supabase
     .from("trips")
-    .insert(mapTripForDatabase(trip))
+    .insert(insertData)
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return mapDatabaseTrip(inserted);
 }
@@ -119,6 +164,8 @@ export async function createTrip(
 export async function updateTrip(
   trip: Trip
 ): Promise<Trip> {
+  const userId = await getCurrentUserId();
+
   const updateData = {
     ...mapTripForDatabase(trip),
     updated_at: new Date().toISOString(),
@@ -128,10 +175,19 @@ export async function updateTrip(
     .from("trips")
     .update(updateData)
     .eq("id", trip.id)
+    .eq("user_id", userId)
     .select()
-    .single();
+    .maybeSingle();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error(
+      "Trip not found or you do not have permission to update it."
+    );
+  }
 
   return mapDatabaseTrip(data);
 }
@@ -139,12 +195,17 @@ export async function updateTrip(
 export async function deleteTrip(
   id: number
 ): Promise<void> {
+  const userId = await getCurrentUserId();
+
   const { error } = await supabase
     .from("trips")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .eq("user_id", userId);
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 }
 
 export function saveDraft(
@@ -176,9 +237,12 @@ export function saveDraft(
 }
 
 export function loadDraft(): TripDraft | null {
-  const draft = sessionStorage.getItem(DRAFT_KEY);
+  const draft =
+    sessionStorage.getItem(DRAFT_KEY);
 
-  return draft ? JSON.parse(draft) : null;
+  return draft
+    ? JSON.parse(draft)
+    : null;
 }
 
 export function clearDraft(): void {

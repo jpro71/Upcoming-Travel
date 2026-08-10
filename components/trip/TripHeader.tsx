@@ -5,7 +5,9 @@ type TripHeaderProps = {
   trip: Trip;
 };
 
-export default function TripHeader({ trip }: TripHeaderProps) {
+export default function TripHeader({
+  trip,
+}: TripHeaderProps) {
   return (
     <>
       <div
@@ -16,9 +18,8 @@ export default function TripHeader({ trip }: TripHeaderProps) {
       />
 
       <div className="flex items-center justify-between bg-white px-6 py-5">
-
         <Link
-          href="/"
+          href="/dashboard"
           className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-300"
         >
           ← Back to Dashboard
@@ -27,7 +28,6 @@ export default function TripHeader({ trip }: TripHeaderProps) {
         <div className="text-sm text-slate-500">
           {trip.status}
         </div>
-
       </div>
     </>
   );
