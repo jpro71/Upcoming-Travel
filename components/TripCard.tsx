@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Trip } from "@/types/trip";
-import { formatDateRange } from "@/lib/dateUtils";
+import { formatDateRange, daysUntil } from "@/lib/dateUtils";
 import TripDetailBadges from "@/components/dashboard/TripDetailBadges";
 
 type TripCardProps = {
@@ -17,6 +17,9 @@ export default function TripCard({
     returnTo === "my-trips"
       ? `/trip/${trip.id}?from=my-trips`
       : `/trip/${trip.id}`;
+
+  const countdown = daysUntil(trip.startDate);
+  const isPast = new Date(trip.endDate) < new Date();
 
   return (
     <Link
@@ -48,10 +51,22 @@ export default function TripCard({
           ▣ {formatDateRange(trip.startDate, trip.endDate)}
         </div>
 
-        <div className="mt-3 border-t border-[#E7DDCA] pt-2">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[#E7DDCA] pt-2">
           <TripDetailBadges
             plannerItems={trip.plannerItems}
           />
+
+          {isPast ? (
+            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+              Completed
+            </span>
+          ) : (
+            <span className="rounded-full bg-[#F5E9D2] px-3 py-1 text-xs font-bold text-[#8F1724]">
+              {countdown === 0
+                ? "Today"
+                : `${countdown} Days`}
+            </span>
+          )}
         </div>
       </div>
     </Link>
