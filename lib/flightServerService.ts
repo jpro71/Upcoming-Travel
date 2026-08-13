@@ -23,8 +23,7 @@ export async function getFlightsServer(
   const { data, error } = await supabase
     .from("flights")
     .select("*")
-    .eq("trip_id", tripId)
-    .order("departure_time", { ascending: true });
+    .eq("trip_id", tripId);
 
   if (error) {
     console.error("Error loading flights:", error);
@@ -39,8 +38,8 @@ export async function getFlightsServer(
     confirmationNumber: row.confirmation_number,
     departureAirport: row.departure_airport,
     arrivalAirport: row.arrival_airport,
-    departureDateTime: row.departure_time,
-    arrivalDateTime: row.arrival_time,
+    departureDateTime: row.departure_datetime,
+    arrivalDateTime: row.arrival_datetime,
     seat: row.seat,
     cabinClass: row.cabin_class,
     cost: row.cost === null ? null : Number(row.cost),
