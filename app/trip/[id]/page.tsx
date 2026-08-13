@@ -18,6 +18,9 @@ type Props = {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{
+    from?: string;
+  }>;
 };
 
 type PlannerItem =
@@ -50,8 +53,10 @@ function getTripLength(start: string, end: string) {
 
 export default async function TripDetailsPage({
   params,
+  searchParams,
 }: Props) {
   const { id } = await params;
+  const { from } = await searchParams;
 
   const supabase = await createSupabaseServerClient();
 
@@ -104,6 +109,9 @@ export default async function TripDetailsPage({
     availableItems.push("documents");
   }
 
+  const returnTo =
+    from === "my-trips" ? "my-trips" : "dashboard";
+
   return (
     <main className="min-h-screen bg-slate-100">
       <div className="relative h-[430px] overflow-hidden">
@@ -143,6 +151,7 @@ export default async function TripDetailsPage({
         <TripHeader
           trip={trip}
           enabledItems={enabledItems}
+          returnTo={returnTo}
         />
 
         <div className="mt-8 rounded-2xl bg-white p-6 shadow-md">
@@ -211,7 +220,7 @@ export default async function TripDetailsPage({
         </div>
 
         {plannerItems?.flights && (
-          <div id="flights" className="scroll-mt-6 mt-8">
+          <div id="flights" className="mt-8 scroll-mt-6">
             <FlightsCard tripId={trip.id} />
           </div>
         )}
@@ -219,14 +228,14 @@ export default async function TripDetailsPage({
         {plannerItems?.rentalCar && (
           <div
             id="rental-cars"
-            className="scroll-mt-6 mt-8"
+            className="mt-8 scroll-mt-6"
           >
             <RentalCarsCard tripId={trip.id} />
           </div>
         )}
 
         {plannerItems?.hotel && (
-          <div id="hotels" className="scroll-mt-6 mt-8">
+          <div id="hotels" className="mt-8 scroll-mt-6">
             <HotelsCard tripId={trip.id} />
           </div>
         )}
@@ -234,7 +243,7 @@ export default async function TripDetailsPage({
         {plannerItems?.restaurants && (
           <div
             id="restaurants"
-            className="scroll-mt-6 mt-8"
+            className="mt-8 scroll-mt-6"
           >
             <RestaurantsCard tripId={trip.id} />
           </div>
@@ -243,7 +252,7 @@ export default async function TripDetailsPage({
         {plannerItems?.documents && (
           <div
             id="documents"
-            className="scroll-mt-6 mt-8"
+            className="mt-8 scroll-mt-6"
           >
             <DocumentsCard tripId={trip.id} />
           </div>

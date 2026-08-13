@@ -6,12 +6,21 @@ import TripDetailBadges from "@/components/dashboard/TripDetailBadges";
 
 type TripCardProps = {
   trip: Trip;
+  returnTo?: "dashboard" | "my-trips";
 };
 
-export default function TripCard({ trip }: TripCardProps) {
+export default function TripCard({
+  trip,
+  returnTo = "dashboard",
+}: TripCardProps) {
+  const tripHref =
+    returnTo === "my-trips"
+      ? `/trip/${trip.id}?from=my-trips`
+      : `/trip/${trip.id}`;
+
   return (
     <Link
-      href={`/trip/${trip.id}`}
+      href={tripHref}
       className="group block overflow-hidden rounded-xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative">
