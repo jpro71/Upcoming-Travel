@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import {
-  getRentalCar,
-  deleteRentalCar,
-} from "@/lib/rentalCarService";
+  getRentalCarServer,
+  deleteRentalCarServer,
+} from "@/lib/rentalCarServerService";
 
 type Props = {
   params: Promise<{
@@ -28,7 +28,7 @@ export default async function DeleteRentalCarPage({
     notFound();
   }
 
-  const rentalCar = await getRentalCar(rentalCarId);
+  const rentalCar = await getRentalCarServer(rentalCarId);
 
   if (!rentalCar) {
     notFound();
@@ -44,7 +44,7 @@ export default async function DeleteRentalCarPage({
   async function deleteCurrentRentalCar() {
     "use server";
 
-    await deleteRentalCar(rentalCarIdToDelete);
+    await deleteRentalCarServer(rentalCarIdToDelete);
 
     redirect(`/trip/${returnTripId}`);
   }

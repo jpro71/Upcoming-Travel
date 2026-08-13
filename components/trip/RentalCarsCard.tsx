@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getRentalCars } from "@/lib/rentalCarService";
+import { getRentalCarsServer } from "@/lib/rentalCarServerService";
 
 type Props = {
   tripId: number;
@@ -30,7 +30,7 @@ function formatCurrency(amount?: number) {
 export default async function RentalCarsCard({
   tripId,
 }: Props) {
-  const rentalCars = await getRentalCars(tripId);
+  const rentalCars = await getRentalCarsServer(tripId);
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-md">
