@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getTripServer } from "@/lib/tripServerService";
-import { getRentalCar } from "@/lib/rentalCarService";
+import { getRentalCarServer } from "@/lib/rentalCarServerService";
 
 import RentalCarForm from "@/components/trip/RentalCarForm";
 
@@ -30,7 +30,7 @@ export default async function EditRentalCarPage({
 
   const [trip, rentalCar] = await Promise.all([
     getTripServer(tripId),
-    getRentalCar(rentalCarId),
+    getRentalCarServer(rentalCarId),
   ]);
 
   if (!trip || !rentalCar) {
