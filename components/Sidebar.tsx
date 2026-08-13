@@ -1,16 +1,13 @@
+import Link from "next/link";
+
 const menuItems = [
-  { label: "Dashboard", icon: "⌂" },
-  { label: "Trips", icon: "▣" },
-  { label: "Travel Map", icon: "⌖" },
-  { label: "Bucket List", icon: "☆" },
-  { label: "Documents", icon: "▤" },
-  { label: "Statistics", icon: "▥" },
-  { label: "Settings", icon: "⚙" },
+  { label: "Dashboard", icon: "⌂", href: "/dashboard" },
+  { label: "Trips", icon: "▣", href: "/dashboard#upcoming-trips" },
 ];
 
 export default function Sidebar() {
   return (
-    <aside className="min-h-[calc(100vh-118px)] w-[220px] shrink-0 bg-gradient-to-b from-[#9E1B28] to-[#B01E2D] text-white">
+    <aside className="hidden min-h-[calc(100vh-118px)] w-[220px] shrink-0 bg-gradient-to-b from-[#9E1B28] to-[#B01E2D] text-white lg:block">
       <div className="p-5">
         <h2 className="mb-5 border-b border-[#D4AF37] pb-3 text-lg font-bold text-[#F1C54B]">
           Navigation
@@ -18,8 +15,9 @@ export default function Sidebar() {
 
         <nav className="space-y-2">
           {menuItems.map((item, index) => (
-            <button
+            <Link
               key={item.label}
+              href={item.href}
               className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left font-semibold transition ${
                 index === 0
                   ? "bg-[#E4B63F] text-[#1A1A1A] shadow-sm"
@@ -29,8 +27,9 @@ export default function Sidebar() {
               <span className="w-5 text-center text-xl leading-none">
                 {item.icon}
               </span>
+
               <span>{item.label}</span>
-            </button>
+            </Link>
           ))}
         </nav>
       </div>

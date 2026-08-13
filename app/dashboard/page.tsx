@@ -38,16 +38,16 @@ export default async function DashboardPage() {
       <div className="flex">
         <Sidebar />
 
-        <div className="flex-1 space-y-8 p-8">
+        <div className="min-w-0 flex-1 space-y-8 p-4 sm:p-6 lg:p-8">
           <HeroCard trip={nextTrip} />
 
-          <div>
+          <section id="upcoming-trips">
             <h2 className="mb-4 text-2xl font-bold">
               Upcoming Trips
             </h2>
 
             {sortedTrips.length === 0 ? (
-              <div className="rounded-xl bg-white p-10 text-center shadow">
+              <div className="rounded-xl bg-white p-8 text-center shadow sm:p-10">
                 <h3 className="text-2xl font-semibold text-slate-700">
                   No trips yet
                 </h3>
@@ -57,7 +57,7 @@ export default async function DashboardPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
                 {sortedTrips.map((trip) => (
                   <TripCard
                     key={trip.id}
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
                 ))}
               </div>
             )}
-          </div>
+          </section>
         </div>
       </div>
     </main>
