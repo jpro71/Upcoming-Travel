@@ -55,3 +55,18 @@ export async function getFlightServer(
 
   return data ? mapFlight(data) : null;
 }
+
+export async function deleteFlightServer(
+  flightId: number
+): Promise<void> {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("flights")
+    .delete()
+    .eq("id", flightId);
+
+  if (error) {
+    throw new Error(`Unable to delete flight: ${error.message}`);
+  }
+}
