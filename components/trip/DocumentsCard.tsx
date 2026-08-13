@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getDocuments } from "@/lib/documentService";
+
+import { getDocumentsServer } from "@/lib/documentServerService";
 import DocumentActions from "@/components/trip/DocumentActions";
 
 type Props = {
@@ -20,14 +21,18 @@ function formatFileSize(bytes?: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default async function DocumentsCard({ tripId }: Props) {
-  const documents = await getDocuments(tripId);
+export default async function DocumentsCard({
+  tripId,
+}: Props) {
+  const documents = await getDocumentsServer(tripId);
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Documents</h2>
+          <h2 className="text-2xl font-bold">
+            Documents
+          </h2>
 
           <p className="mt-1 text-slate-500">
             Travel documents for this trip.
@@ -60,7 +65,7 @@ export default async function DocumentsCard({ tripId }: Props) {
               className="flex items-center justify-between rounded-xl border border-slate-200 p-4"
             >
               <div>
-                <div className="font-semibold text-lg">
+                <div className="text-lg font-semibold">
                   📄 {document.title}
                 </div>
 

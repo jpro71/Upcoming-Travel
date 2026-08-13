@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+
+import {
+  deleteDocumentServer,
+  getDocumentServer,
+} from "@/lib/documentServerService";
 
 export async function DELETE(
   request: Request,
@@ -7,41 +11,39 @@ export async function DELETE(
 ) {
   const { id } = await params;
 
-  const { data: document, error } = await supabase
-    .from("documents")
-    .select("file_path")
-    .eq("id", Number(id))
-    .single();
+  const documentId = Number(id);
 
-  if (error || !document) {
+  if (!Number.isFinite(documentId)) {
+    return NextResponse.json(
+      { error: "Invalid document ID." },
+      { status: 400 }
+    );
+  }
+
+  const document = await getDocumentServer(documentId);
+
+  if (!document) {
     return NextResponse.json(
       { error: "Document not found." },
       { status: 404 }
     );
   }
 
-  const { error: storageError } = await supabase.storage
-    .from("trip-documents")
-    .remove([document.file_path]);
+  try {
+    await deleteDocumentServer(
+      documentId,
+      document.filePath
+    );
 
-  if (storageError) {
+    return NextResponse.json({
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error deleting document:", error);
+
     return NextResponse.json(
-      { error: storageError.message },
+      { error: "Unable to delete document." },
       { status: 500 }
     );
   }
-
-  const { error: deleteError } = await supabase
-    .from("documents")
-    .delete()
-    .eq("id", Number(id));
-
-  if (deleteError) {
-    return NextResponse.json(
-      { error: deleteError.message },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json({ success: true });
 }

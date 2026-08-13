@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+
+import {
+  createDocumentSignedUrlServer,
+  getDocumentServer,
+} from "@/lib/documentServerService";
 
 export async function GET(
   request: Request,
@@ -7,35 +11,41 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const { data: document, error } = await supabase
-    .from("documents")
-    .select("file_path, file_name")
-    .eq("id", Number(id))
-    .single();
+  const documentId = Number(id);
 
-  if (error || !document) {
+  if (!Number.isFinite(documentId)) {
+    return NextResponse.json(
+      { error: "Invalid document ID." },
+      { status: 400 }
+    );
+  }
+
+  const document = await getDocumentServer(documentId);
+
+  if (!document) {
     return NextResponse.json(
       { error: "Document not found." },
       { status: 404 }
     );
   }
 
-  const { data, error: urlError } = await supabase.storage
-    .from("trip-documents")
-    .createSignedUrl(
-      document.file_path,
-      60 * 60,
-      {
-        download: document.file_name,
-      }
+  try {
+    const signedUrl =
+      await createDocumentSignedUrlServer(
+        document.filePath,
+        document.fileName
+      );
+
+    return NextResponse.redirect(signedUrl);
+  } catch (error) {
+    console.error(
+      "Error creating document download URL:",
+      error
     );
 
-  if (urlError) {
     return NextResponse.json(
-      { error: urlError.message },
+      { error: "Unable to download document." },
       { status: 500 }
     );
   }
-
-  return NextResponse.redirect(data.signedUrl);
 }
