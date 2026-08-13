@@ -24,7 +24,7 @@ export default function Header() {
           className="flex min-w-0 items-center"
         >
           <img
-            src="/portalpuffin-logo.png"
+            src="/images/logos/portalpuffin-logo.png"
             alt="PortalPuffin"
             className="h-auto w-[190px] max-w-full sm:w-[230px] lg:w-[300px]"
           />
