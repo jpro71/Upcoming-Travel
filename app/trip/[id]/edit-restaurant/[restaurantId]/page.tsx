@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getRestaurant } from "@/lib/restaurantService";
+import { getRestaurantServer } from "@/lib/restaurantServerService";
 import RestaurantForm from "@/components/trip/RestaurantForm";
 
 type Props = {
@@ -16,7 +16,7 @@ export default async function EditRestaurantPage({
 }: Props) {
   const { id, restaurantId } = await params;
 
-  const restaurant = await getRestaurant(
+  const restaurant = await getRestaurantServer(
     Number(restaurantId)
   );
 

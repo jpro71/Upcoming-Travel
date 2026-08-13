@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getRestaurants } from "@/lib/restaurantService";
+import { getRestaurantsServer } from "@/lib/restaurantServerService";
 
 type Props = {
   tripId: number;
@@ -19,7 +19,7 @@ function formatDate(date?: string) {
 export default async function RestaurantsCard({
   tripId,
 }: Props) {
-  const restaurants = await getRestaurants(tripId);
+  const restaurants = await getRestaurantsServer(tripId);
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-md">

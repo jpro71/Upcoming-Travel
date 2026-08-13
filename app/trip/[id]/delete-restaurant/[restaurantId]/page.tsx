@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import {
-  getRestaurant,
-  deleteRestaurant,
-} from "@/lib/restaurantService";
+  getRestaurantServer,
+  deleteRestaurantServer,
+} from "@/lib/restaurantServerService";
 
 type Props = {
   params: Promise<{
@@ -18,7 +18,7 @@ export default async function DeleteRestaurantPage({
 }: Props) {
   const { id, restaurantId } = await params;
 
-  const restaurant = await getRestaurant(
+  const restaurant = await getRestaurantServer(
     Number(restaurantId)
   );
 
@@ -31,7 +31,7 @@ export default async function DeleteRestaurantPage({
   async function deleteCurrentRestaurant() {
     "use server";
 
-    await deleteRestaurant(restaurantIdToDelete);
+    await deleteRestaurantServer(restaurantIdToDelete);
 
     redirect(`/trip/${id}`);
   }
