@@ -2,33 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { loadDraft, saveDraft } from "@/lib/tripService";
 
 type PlannerKey =
   | "flights"
   | "rentalCar"
-  | "train"
-  | "ferry"
   | "hotel"
-  | "vacationRental"
   | "documents"
-  | "restaurants"
-  | "activities"
-  | "packingList"
-  | "budget";
+  | "restaurants";
 
 const DEFAULT_SELECTIONS: Record<PlannerKey, boolean> = {
   flights: false,
   rentalCar: false,
-  train: false,
-  ferry: false,
   hotel: false,
-  vacationRental: false,
   documents: false,
   restaurants: false,
-  activities: false,
-  packingList: false,
-  budget: false,
 };
 
 export default function PlannerPage() {
@@ -41,12 +30,12 @@ export default function PlannerPage() {
     const draft = loadDraft();
 
     if (draft?.plannerItems) {
-      const { notes: _notes, ...plannerItems } =
-        draft.plannerItems;
-
       setSelected({
-        ...DEFAULT_SELECTIONS,
-        ...plannerItems,
+        flights: draft.plannerItems.flights ?? false,
+        rentalCar: draft.plannerItems.rentalCar ?? false,
+        hotel: draft.plannerItems.hotel ?? false,
+        documents: draft.plannerItems.documents ?? false,
+        restaurants: draft.plannerItems.restaurants ?? false,
       });
     }
   }, []);
@@ -58,25 +47,32 @@ export default function PlannerPage() {
     }));
   }
 
-  function next() {
+  function savePlannerSelections() {
     saveDraft({
       plannerItems: {
-        ...selected,
+        flights: selected.flights,
+        rentalCar: selected.rentalCar,
+        train: false,
+        ferry: false,
+        hotel: selected.hotel,
+        vacationRental: false,
+        documents: selected.documents,
+        restaurants: selected.restaurants,
+        activities: false,
+        packingList: false,
+        budget: false,
         notes: false,
       },
     });
+  }
 
+  function next() {
+    savePlannerSelections();
     router.push("/new-trip/photo");
   }
 
   function previous() {
-    saveDraft({
-      plannerItems: {
-        ...selected,
-        notes: false,
-      },
-    });
-
+    savePlannerSelections();
     router.push("/new-trip");
   }
 
@@ -105,7 +101,9 @@ export default function PlannerPage() {
 
         <div
           className={`mt-3 text-lg font-semibold ${
-            active ? "text-[#8F1724]" : "text-[#1A1A1A]"
+            active
+              ? "text-[#8F1724]"
+              : "text-[#1A1A1A]"
           }`}
         >
           {title}
@@ -129,8 +127,8 @@ export default function PlannerPage() {
           </h1>
 
           <p className="mt-2 text-[#5C554A]">
-            Step 2 of 3 — Choose what you'd like to manage for
-            this trip.
+            Step 2 of 3 — Choose what you'd like to manage
+            for this trip.
           </p>
         </div>
 
@@ -139,7 +137,7 @@ export default function PlannerPage() {
             Transportation
           </h2>
 
-          <div className="mb-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-9 grid gap-4 md:grid-cols-2">
             <PlannerCard
               icon="✈️"
               title="Flights"
@@ -151,35 +149,17 @@ export default function PlannerPage() {
               title="Rental Car"
               item="rentalCar"
             />
-
-            <PlannerCard
-              icon="🚆"
-              title="Train"
-              item="train"
-            />
-
-            <PlannerCard
-              icon="⛴️"
-              title="Ferry"
-              item="ferry"
-            />
           </div>
 
           <h2 className="mb-4 border-l-4 border-[#D4AF37] pl-3 text-xl font-bold text-[#1A1A1A]">
             Accommodations
           </h2>
 
-          <div className="mb-9 grid gap-4 md:grid-cols-2">
+          <div className="mb-9 grid gap-4">
             <PlannerCard
               icon="🏨"
               title="Hotel"
               item="hotel"
-            />
-
-            <PlannerCard
-              icon="🏠"
-              title="Vacation Rental"
-              item="vacationRental"
             />
           </div>
 
@@ -187,7 +167,7 @@ export default function PlannerPage() {
             Planning
           </h2>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             <PlannerCard
               icon="📄"
               title="Documents"
@@ -198,24 +178,6 @@ export default function PlannerPage() {
               icon="🍽️"
               title="Restaurants"
               item="restaurants"
-            />
-
-            <PlannerCard
-              icon="🎟️"
-              title="Activities"
-              item="activities"
-            />
-
-            <PlannerCard
-              icon="🧳"
-              title="Packing List"
-              item="packingList"
-            />
-
-            <PlannerCard
-              icon="💰"
-              title="Budget"
-              item="budget"
             />
           </div>
 
