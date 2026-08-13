@@ -9,7 +9,7 @@ type HeroCardProps = {
 export default function HeroCard({ trip }: HeroCardProps) {
   if (!trip) {
     return (
-      <div className="rounded-xl bg-white p-6 shadow-md">
+      <div className="rounded-xl bg-white p-5 shadow-md">
         <h2 className="text-3xl font-bold text-[#1A1A1A]">
           Plan Your Next Adventure
         </h2>
@@ -28,10 +28,10 @@ export default function HeroCard({ trip }: HeroCardProps) {
       <img
         src={trip.image || "/images/default-trip.jpg"}
         alt={trip.title}
-        className="h-[180px] w-full object-cover"
+        className="h-[clamp(135px,17vh,180px)] w-full object-cover"
       />
 
-      <div className="p-5">
+      <div className="p-4 xl:p-5">
         <div className="text-xs uppercase tracking-[0.14em] text-[#6B6B6B]">
           Next Adventure
         </div>
@@ -48,7 +48,7 @@ export default function HeroCard({ trip }: HeroCardProps) {
           </span>
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex rounded-lg bg-[#B01E2D] px-4 py-2 text-sm font-bold text-white shadow-sm">
             {countdown} Days Remaining
           </div>
