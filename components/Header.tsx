@@ -19,9 +19,7 @@ export default function Header() {
 
   return (
     <header className="relative border-b border-slate-200 bg-white">
-      <div className="flex min-h-[86px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:h-[240px] lg:px-8 lg:py-4">
-
-        {/* Logo */}
+      <div className="flex min-h-[86px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:h-[clamp(150px,20vh,220px)] lg:px-8 lg:py-3">
         <Link
           href="/dashboard"
           className="flex min-w-0 items-center"
@@ -31,12 +29,11 @@ export default function Header() {
             alt="PortalPuffin"
             width={1153}
             height={381}
-            className="h-auto w-[190px] sm:w-[260px] lg:w-[720px]"
+            className="h-auto w-[190px] sm:w-[260px] lg:w-[clamp(440px,42vw,680px)]"
             priority
           />
         </Link>
 
-        {/* Desktop controls */}
         <div className="hidden shrink-0 items-center gap-3 lg:flex">
           <Link
             href="/new-trip"
@@ -61,7 +58,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile controls */}
         <div className="flex shrink-0 items-center gap-2 lg:hidden">
           <Link
             href="/new-trip"
@@ -82,7 +78,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
         <div className="absolute right-4 top-[76px] z-50 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl lg:hidden">
           <nav className="p-2">
