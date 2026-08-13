@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { getHotel, deleteHotel } from "@/lib/hotelService";
+import {
+  getHotelServer,
+  deleteHotelServer,
+} from "@/lib/hotelServerService";
 
 type Props = {
   params: Promise<{
@@ -15,7 +18,7 @@ export default async function DeleteHotelPage({
 }: Props) {
   const { id, hotelId } = await params;
 
-  const hotel = await getHotel(Number(hotelId));
+  const hotel = await getHotelServer(Number(hotelId));
 
   if (!hotel) {
     notFound();
@@ -26,7 +29,7 @@ export default async function DeleteHotelPage({
   async function deleteCurrentHotel() {
     "use server";
 
-    await deleteHotel(hotelIdToDelete);
+    await deleteHotelServer(hotelIdToDelete);
 
     redirect(`/trip/${id}`);
   }

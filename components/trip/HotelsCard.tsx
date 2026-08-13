@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getHotels } from "@/lib/hotelService";
+import { getHotelsServer } from "@/lib/hotelServerService";
 
 type Props = {
   tripId: number;
@@ -19,7 +19,7 @@ function formatDate(date?: string) {
 export default async function HotelsCard({
   tripId,
 }: Props) {
-  const hotels = await getHotels(tripId);
+  const hotels = await getHotelsServer(tripId);
 
   return (
     <div className="rounded-2xl bg-white p-6 shadow-md">

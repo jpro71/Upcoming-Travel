@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getHotel } from "@/lib/hotelService";
+import { getHotelServer } from "@/lib/hotelServerService";
 
 import HotelForm from "@/components/trip/HotelForm";
 
@@ -17,7 +17,7 @@ export default async function EditHotelPage({
 }: Props) {
   const { id, hotelId } = await params;
 
-  const hotel = await getHotel(Number(hotelId));
+  const hotel = await getHotelServer(Number(hotelId));
 
   if (!hotel) {
     notFound();
