@@ -1,5 +1,6 @@
 import { Trip } from "@/types/trip";
 import { formatDateRange, daysUntil } from "@/lib/dateUtils";
+import TripDetailBadges from "@/components/dashboard/TripDetailBadges";
 
 type HeroCardProps = {
   trip?: Trip;
@@ -12,6 +13,7 @@ export default function HeroCard({ trip }: HeroCardProps) {
         <h2 className="text-3xl font-bold text-[#1A1A1A]">
           Plan Your Next Adventure
         </h2>
+
         <p className="mt-2 text-sm text-[#6B6B6B]">
           Click <strong>Add Trip</strong> to start planning.
         </p>
@@ -41,11 +43,19 @@ export default function HeroCard({ trip }: HeroCardProps) {
         <div className="mt-1 flex flex-wrap items-center gap-3 text-sm text-[#6B6B6B]">
           <span>⌖ {trip.destination}</span>
           <span className="text-[#D4AF37]">|</span>
-          <span>▣ {formatDateRange(trip.startDate, trip.endDate)}</span>
+          <span>
+            ▣ {formatDateRange(trip.startDate, trip.endDate)}
+          </span>
         </div>
 
-        <div className="mt-4 inline-flex rounded-lg bg-[#B01E2D] px-4 py-2 text-sm font-bold text-white shadow-sm">
-          {countdown} Days Remaining
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+          <div className="inline-flex rounded-lg bg-[#B01E2D] px-4 py-2 text-sm font-bold text-white shadow-sm">
+            {countdown} Days Remaining
+          </div>
+
+          <TripDetailBadges
+            plannerItems={trip.plannerItems}
+          />
         </div>
       </div>
     </div>

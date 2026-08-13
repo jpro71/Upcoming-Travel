@@ -96,9 +96,9 @@ export default function NewTripPage() {
   }
 
   function handleCancel() {
-    clearDraft();
-    router.push("/");
-  }
+  clearDraft();
+  router.push("/dashboard");
+}
 
   const inputClass =
     "w-full rounded-lg border border-[#D9C9AA] bg-white p-3 text-[#1A1A1A] outline-none transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/25";

@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
 import { mapDatabaseTrip } from "@/mappers/tripMapper";
-import { Trip } from "@/types/trip";
+import { PlannerItems, Trip } from "@/types/trip";
 
 async function applyCoverPhoto(
   trip: Trip
@@ -85,4 +85,70 @@ export async function getTripServer(
   return applyCoverPhoto(
     mapDatabaseTrip(data)
   );
+}
+
+export async function enableTripPlannerItem(
+  tripId: number,
+  item: keyof PlannerItems
+): Promise<void> {
+  const supabase =
+    await createSupabaseServerClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Not authenticated.");
+  }
+
+  const { data: trip, error: tripError } =
+    await supabase
+      .from("trips")
+      .select("planner_items")
+      .eq("id", tripId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if (tripError) {
+    throw tripError;
+  }
+
+  if (!trip) {
+    throw new Error("Trip not found.");
+  }
+
+  const currentPlannerItems =
+    (trip.planner_items ?? {}) as Partial<PlannerItems>;
+
+  const updatedPlannerItems: PlannerItems = {
+    flights: currentPlannerItems.flights ?? false,
+    rentalCar: currentPlannerItems.rentalCar ?? false,
+    train: currentPlannerItems.train ?? false,
+    ferry: currentPlannerItems.ferry ?? false,
+    hotel: currentPlannerItems.hotel ?? false,
+    vacationRental:
+      currentPlannerItems.vacationRental ?? false,
+    documents: currentPlannerItems.documents ?? false,
+    restaurants:
+      currentPlannerItems.restaurants ?? false,
+    activities: currentPlannerItems.activities ?? false,
+    packingList:
+      currentPlannerItems.packingList ?? false,
+    budget: currentPlannerItems.budget ?? false,
+    notes: currentPlannerItems.notes ?? false,
+    [item]: true,
+  };
+
+  const { error: updateError } = await supabase
+    .from("trips")
+    .update({
+      planner_items: updatedPlannerItems,
+    })
+    .eq("id", tripId)
+    .eq("user_id", user.id);
+
+  if (updateError) {
+    throw updateError;
+  }
 }

@@ -12,12 +12,20 @@ import HotelsCard from "@/components/trip/HotelsCard";
 import RestaurantsCard from "@/components/trip/RestaurantsCard";
 import DocumentsCard from "@/components/trip/DocumentsCard";
 import CoverPhotoEditor from "@/components/trip/CoverPhotoEditor";
+import AddToTrip from "@/components/trip/AddToTrip";
 
 type Props = {
   params: Promise<{
     id: string;
   }>;
 };
+
+type PlannerItem =
+  | "flights"
+  | "rentalCar"
+  | "hotel"
+  | "restaurants"
+  | "documents";
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
@@ -63,6 +71,39 @@ export default async function TripDetailsPage({
 
   const plannerItems = trip.plannerItems;
 
+  const enabledItems: PlannerItem[] = [];
+  const availableItems: PlannerItem[] = [];
+
+  if (plannerItems?.flights) {
+    enabledItems.push("flights");
+  } else {
+    availableItems.push("flights");
+  }
+
+  if (plannerItems?.rentalCar) {
+    enabledItems.push("rentalCar");
+  } else {
+    availableItems.push("rentalCar");
+  }
+
+  if (plannerItems?.hotel) {
+    enabledItems.push("hotel");
+  } else {
+    availableItems.push("hotel");
+  }
+
+  if (plannerItems?.restaurants) {
+    enabledItems.push("restaurants");
+  } else {
+    availableItems.push("restaurants");
+  }
+
+  if (plannerItems?.documents) {
+    enabledItems.push("documents");
+  } else {
+    availableItems.push("documents");
+  }
+
   return (
     <main className="min-h-screen bg-slate-100">
       <div className="relative h-[430px] overflow-hidden">
@@ -99,7 +140,10 @@ export default async function TripDetailsPage({
       </div>
 
       <div className="relative z-10 mx-auto -mt-10 max-w-7xl px-10 pb-10">
-        <TripHeader trip={trip} />
+        <TripHeader
+          trip={trip}
+          enabledItems={enabledItems}
+        />
 
         <div className="mt-8 rounded-2xl bg-white p-6 shadow-md">
           <div className="grid gap-6 md:grid-cols-4">
@@ -154,37 +198,53 @@ export default async function TripDetailsPage({
           </div>
         </div>
 
+        <div className="mt-8">
+          <AddToTrip
+            tripId={trip.id}
+            availableItems={availableItems}
+          />
+        </div>
+
         <div className="mt-8 grid gap-8 lg:grid-cols-2">
           <TripOverviewForm trip={trip} />
           <TripNotes trip={trip} />
         </div>
 
         {plannerItems?.flights && (
-          <div className="mt-8">
+          <div id="flights" className="scroll-mt-6 mt-8">
             <FlightsCard tripId={trip.id} />
           </div>
         )}
 
         {plannerItems?.rentalCar && (
-          <div className="mt-8">
+          <div
+            id="rental-cars"
+            className="scroll-mt-6 mt-8"
+          >
             <RentalCarsCard tripId={trip.id} />
           </div>
         )}
 
         {plannerItems?.hotel && (
-          <div className="mt-8">
+          <div id="hotels" className="scroll-mt-6 mt-8">
             <HotelsCard tripId={trip.id} />
           </div>
         )}
 
         {plannerItems?.restaurants && (
-          <div className="mt-8">
+          <div
+            id="restaurants"
+            className="scroll-mt-6 mt-8"
+          >
             <RestaurantsCard tripId={trip.id} />
           </div>
         )}
 
         {plannerItems?.documents && (
-          <div className="mt-8">
+          <div
+            id="documents"
+            className="scroll-mt-6 mt-8"
+          >
             <DocumentsCard tripId={trip.id} />
           </div>
         )}
