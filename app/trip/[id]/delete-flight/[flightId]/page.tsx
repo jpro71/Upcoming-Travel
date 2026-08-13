@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import {
-  getFlight,
-  deleteFlight,
-} from "@/lib/flightService";
+import { deleteFlight } from "@/lib/flightService";
+import { getFlightServer } from "@/lib/flightServerService";
 
 type Props = {
   params: Promise<{
@@ -18,7 +16,7 @@ export default async function DeleteFlightPage({
 }: Props) {
   const { id, flightId } = await params;
 
-  const flight = await getFlight(Number(flightId));
+  const flight = await getFlightServer(Number(flightId));
 
   if (!flight) {
     notFound();
