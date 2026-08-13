@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -18,20 +19,25 @@ export default function Header() {
 
   return (
     <header className="relative border-b border-slate-200 bg-white">
-      <div className="flex min-h-[86px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:min-h-[118px] lg:px-8">
+      <div className="flex min-h-[86px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:h-[240px] lg:px-8 lg:py-4">
+
+        {/* Logo */}
         <Link
           href="/dashboard"
           className="flex min-w-0 items-center"
         >
-          <img
-            src="/images/logos/portalpuffin-logo.png"
+          <Image
+            src="/images/logos/portalpuffin-logo-header.png"
             alt="PortalPuffin"
-            className="h-auto w-[190px] max-w-full sm:w-[230px] lg:w-[300px]"
+            width={1153}
+            height={381}
+            className="h-auto w-[190px] sm:w-[260px] lg:w-[720px]"
+            priority
           />
         </Link>
 
         {/* Desktop controls */}
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden shrink-0 items-center gap-3 lg:flex">
           <Link
             href="/new-trip"
             className="rounded-xl bg-[#B01E2D] px-5 py-3 font-semibold text-white transition hover:bg-[#8F1724]"
@@ -76,6 +82,7 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="absolute right-4 top-[76px] z-50 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl lg:hidden">
           <nav className="p-2">
