@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getFlight } from "@/lib/flightService";
+import { getFlightServer } from "@/lib/flightServerService";
 
 import FlightForm from "@/components/trip/FlightForm";
 
@@ -17,7 +17,7 @@ export default async function EditFlightPage({
 }: Props) {
   const { id, flightId } = await params;
 
-  const flight = await getFlight(
+  const flight = await getFlightServer(
     Number(flightId)
   );
 
@@ -27,13 +27,9 @@ export default async function EditFlightPage({
 
   return (
     <main className="min-h-screen bg-slate-100 p-10">
-
       <div className="mx-auto max-w-4xl">
-
         <div className="mb-8 flex items-center justify-between">
-
           <div>
-
             <h1 className="text-4xl font-bold">
               Edit Flight
             </h1>
@@ -41,7 +37,6 @@ export default async function EditFlightPage({
             <p className="mt-2 text-slate-500">
               Update your flight reservation.
             </p>
-
           </div>
 
           <Link
@@ -50,7 +45,6 @@ export default async function EditFlightPage({
           >
             Cancel
           </Link>
-
         </div>
 
         <FlightForm
@@ -64,9 +58,7 @@ export default async function EditFlightPage({
           flight={flight}
           isEditing={true}
         />
-
       </div>
-
     </main>
   );
 }

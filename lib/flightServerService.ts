@@ -1,19 +1,23 @@
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
+import type { Flight } from "@/types/flight";
 
-export type Flight = {
-  id: number;
-  tripId: number;
-  airline: string;
-  flightNumber: string;
-  confirmationNumber: string | null;
-  departureAirport: string;
-  arrivalAirport: string;
-  departureDateTime: string | null;
-  arrivalDateTime: string | null;
-  seat: string | null;
-  cabinClass: string | null;
-  cost: number | null;
-};
+function mapFlight(row: any): Flight {
+  return {
+    id: row.id,
+    tripId: row.trip_id,
+    airline: row.airline,
+    flightNumber: row.flight_number,
+    confirmationNumber: row.confirmation_number,
+    departureAirport: row.departure_airport,
+    arrivalAirport: row.arrival_airport,
+    departureDateTime: row.departure_datetime,
+    arrivalDateTime: row.arrival_datetime,
+    seat: row.seat,
+    cabinClass: row.cabin_class,
+    cost: row.cost === null ? null : Number(row.cost),
+    notes: row.notes,
+  };
+}
 
 export async function getFlightsServer(
   tripId: number
@@ -30,18 +34,24 @@ export async function getFlightsServer(
     return [];
   }
 
-  return (data ?? []).map((row) => ({
-    id: row.id,
-    tripId: row.trip_id,
-    airline: row.airline,
-    flightNumber: row.flight_number,
-    confirmationNumber: row.confirmation_number,
-    departureAirport: row.departure_airport,
-    arrivalAirport: row.arrival_airport,
-    departureDateTime: row.departure_datetime,
-    arrivalDateTime: row.arrival_datetime,
-    seat: row.seat,
-    cabinClass: row.cabin_class,
-    cost: row.cost === null ? null : Number(row.cost),
-  }));
+  return (data ?? []).map(mapFlight);
+}
+
+export async function getFlightServer(
+  flightId: number
+): Promise<Flight | null> {
+  const supabase = await createSupabaseServerClient();
+
+  const { data, error } = await supabase
+    .from("flights")
+    .select("*")
+    .eq("id", flightId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error loading flight:", error);
+    return null;
+  }
+
+  return data ? mapFlight(data) : null;
 }
