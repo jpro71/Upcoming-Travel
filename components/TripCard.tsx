@@ -18,7 +18,7 @@ export default function TripCard({ trip }: TripCardProps) {
         <img
           src={trip.image || "/images/default-trip.jpg"}
           alt={trip.title}
-          className="h-[150px] w-full object-cover"
+          className="h-[clamp(110px,14vh,150px)] w-full object-cover"
         />
 
         <div className="absolute left-3 top-3 rounded-full bg-[#B01E2D] px-3 py-1 text-xs font-semibold text-white shadow-sm">
@@ -26,7 +26,7 @@ export default function TripCard({ trip }: TripCardProps) {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-3 xl:p-4">
         <h3 className="text-xl font-bold text-[#1A1A1A] transition group-hover:text-[#B01E2D]">
           {trip.title}
         </h3>
@@ -39,7 +39,7 @@ export default function TripCard({ trip }: TripCardProps) {
           ▣ {formatDateRange(trip.startDate, trip.endDate)}
         </div>
 
-        <div className="mt-4 border-t border-[#E7DDCA] pt-3">
+        <div className="mt-3 border-t border-[#E7DDCA] pt-2">
           <TripDetailBadges
             plannerItems={trip.plannerItems}
           />
