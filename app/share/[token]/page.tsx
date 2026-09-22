@@ -506,20 +506,20 @@ export default async function SharedTripPage({
     journeys.length + Math.min(extraSections, 2);
 
   return (
-    <main className="relative overflow-x-hidden bg-slate-950 lg:h-screen lg:overflow-hidden">
+    <main className="relative min-h-[100dvh] overflow-x-hidden bg-slate-950 lg:h-screen lg:min-h-0 lg:overflow-hidden">
       {trip.image ? (
         <img
           src={trip.image}
           alt=""
-          className="fixed inset-0 h-full w-full object-cover lg:absolute"
+          className="fixed inset-0 h-[100dvh] w-full object-cover lg:absolute lg:h-full"
         />
       ) : (
-        <div className="fixed inset-0 bg-gradient-to-br from-slate-700 via-slate-800 to-slate-950 lg:absolute" />
+        <div className="fixed inset-0 h-[100dvh] bg-gradient-to-br from-slate-700 via-slate-800 to-slate-950 lg:absolute lg:h-full" />
       )}
 
-      <div className="fixed inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/45 lg:absolute" />
+      <div className="fixed inset-0 h-[100dvh] bg-gradient-to-b from-black/45 via-black/5 to-black/45 lg:absolute lg:h-full" />
 
-      <div className="relative z-10 flex flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
+      <div className="relative z-10 flex min-h-[100dvh] flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
         <header className="shrink-0 text-white">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
@@ -708,9 +708,7 @@ export default async function SharedTripPage({
 
                       <div className="mt-3 grid grid-cols-2 gap-3 text-[11px] leading-4 text-slate-600">
                         <div>
-                          <strong>
-                            Pickup
-                          </strong>
+                          <strong>Pickup</strong>
                           <br />
                           {car.pickupLocation}
                           <br />
@@ -720,9 +718,7 @@ export default async function SharedTripPage({
                         </div>
 
                         <div>
-                          <strong>
-                            Drop-off
-                          </strong>
+                          <strong>Drop-off</strong>
                           <br />
                           {car.dropoffLocation}
                           <br />
@@ -806,8 +802,7 @@ export default async function SharedTripPage({
         </div>
 
         <footer className="mt-2 shrink-0 pb-1 text-center text-[9px] font-medium text-white/80 drop-shadow">
-          Read-only itinerary shared through Portal
-          Puffin
+          Read-only itinerary shared through Portal Puffin
         </footer>
       </div>
     </main>
