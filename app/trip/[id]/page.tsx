@@ -12,6 +12,7 @@ import HotelsCard from "@/components/trip/HotelsCard";
 import RestaurantsCard from "@/components/trip/RestaurantsCard";
 import DocumentsCard from "@/components/trip/DocumentsCard";
 import CoverPhotoEditor from "@/components/trip/CoverPhotoEditor";
+import ShareTripButton from "@/components/trip/ShareTripButton";
 import AddToTrip from "@/components/trip/AddToTrip";
 
 type Props = {
@@ -123,7 +124,8 @@ export default async function TripDetailsPage({
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-        <div className="absolute right-8 top-8 z-20">
+        <div className="absolute right-8 top-8 z-20 flex gap-3">
+          <ShareTripButton tripId={trip.id} />
           <CoverPhotoEditor tripId={trip.id} />
         </div>
 
