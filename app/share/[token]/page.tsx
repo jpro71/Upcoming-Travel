@@ -506,7 +506,7 @@ export default async function SharedTripPage({
     journeys.length + Math.min(extraSections, 2);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-slate-950 lg:h-screen lg:overflow-hidden">
+    <main className="relative overflow-x-hidden bg-slate-950 lg:h-screen lg:overflow-hidden">
       {trip.image ? (
         <img
           src={trip.image}
@@ -519,7 +519,7 @@ export default async function SharedTripPage({
 
       <div className="fixed inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/45 lg:absolute" />
 
-      <div className="relative z-10 flex min-h-screen flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
+      <div className="relative z-10 flex flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
         <header className="shrink-0 text-white">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
@@ -561,17 +561,8 @@ export default async function SharedTripPage({
           </div>
         </header>
 
-        {/*
-          Mobile hero spacer:
-          Deliberately exposes the destination photograph
-          before the itinerary cards begin.
-        */}
         <div className="h-[180px] shrink-0 sm:h-[210px] lg:hidden" />
 
-        {/*
-          Desktop uses all available middle space so the
-          itinerary remains anchored near the bottom.
-        */}
         <div className="hidden flex-1 lg:block" />
 
         <div className="grid gap-3 lg:max-h-[50vh] lg:grid-cols-12">
