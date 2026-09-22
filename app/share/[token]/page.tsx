@@ -506,20 +506,20 @@ export default async function SharedTripPage({
     journeys.length + Math.min(extraSections, 2);
 
   return (
-    <main className="relative min-h-[100dvh] overflow-x-hidden bg-slate-950 lg:h-screen lg:min-h-0 lg:overflow-hidden">
+    <main className="relative isolate min-h-[100dvh] overflow-x-hidden bg-slate-950 lg:h-screen lg:min-h-0 lg:overflow-hidden">
       {trip.image ? (
         <img
           src={trip.image}
           alt=""
-          className="fixed inset-0 h-[100dvh] w-full object-cover lg:absolute lg:h-full"
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
         />
       ) : (
-        <div className="fixed inset-0 h-[100dvh] bg-gradient-to-br from-slate-700 via-slate-800 to-slate-950 lg:absolute lg:h-full" />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-slate-700 via-slate-800 to-slate-950" />
       )}
 
-      <div className="fixed inset-0 h-[100dvh] bg-gradient-to-b from-black/45 via-black/5 to-black/45 lg:absolute lg:h-full" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/45 via-black/5 to-black/45" />
 
-      <div className="relative z-10 flex min-h-[100dvh] flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
+      <div className="relative flex min-h-[100dvh] flex-col p-3 sm:p-4 lg:h-screen lg:min-h-0">
         <header className="shrink-0 text-white">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
